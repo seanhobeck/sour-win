@@ -1,20 +1,19 @@
 /**
  * 
  *      @author Sean Hobeck
- *       @date 02-14-2023
+ *       @date 02-15-2023
  * 
  **/
 #pragma once
 
-/// @uses: mem:: (namespace)
-#include "../util/memory.hpp"
+/// @uses: physent, ent, etc..
+#include "entity.hpp"
 
 /// @uses: SDL2, mixer & image, zlib, enet, opengl32
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_image.h>
-#include <GL/gl.h>
-#include <GL/glut.h>
+#include <SDL2/SDL_opengl.h>
 #include <zlib.h>
 
 

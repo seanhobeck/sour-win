@@ -1,13 +1,16 @@
 /**
  * 
  *      @author Sean Hobeck
- *       @date 02-14-2023
+ *       @date 02-15-2023
  * 
  **/
 #pragma once
 
 /// @uses: including std c++ 23 features.
 #include "../v23/print.h"
+
+/// @uses: unistd functions
+#include <unistd.h>
 
 /// @uses: dlfcn & intrinsics.
 #include <dlfcn.h>
@@ -20,7 +23,9 @@
 /// @note: Create a const virtual function with name and VA ARGS.
 #define vfunc_const(ret, name, ...) virtual ret name(__VA_ARGS__) const = 0;
 /// @note: Create padding.
-#define pad(bytes) uint8_t _pad [bytes];
+#define pad(nm, bytes) uint8_t nm [bytes];
+/// @note: Create padding with a size.
+#define pad_sz(nm, n, type) uint8_t nm [n * sizeof(type)];
 
 /// @brief Namespace for logging out to our seperate console.
 namespace mem
@@ -65,16 +70,5 @@ namespace mem
     get_vfunc(void* p_this, const std::size_t _idx) 
     {
         return (*static_cast<T**>(p_this))[_idx];
-    };
-
-    /// @brief Calling a virtual function.
-    /// @param p_this Pointer to the base class.
-    /// @param _idx Index of the virtual function.
-    /// @param ...args Packed function arguments.
-    /// @return The function called (casted).
-    template<typename T, typename ... pargs_t> static constexpr T
-    call_vfunc(void* p_this, const std::size_t _idx, pargs_t... args) 
-    {
-        return (*static_cast<T(*)(void*, decltype(args))>(p_this))[p_this, args...];
     };
 };
