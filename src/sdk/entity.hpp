@@ -191,7 +191,7 @@ namespace sdk
     };
 
     /// @brief Class structure for player state.
-    /// @link: https://github.com/keepitsmpl/Cube-2-Sauerbraten-Internal-Cheat/blob/main/Entity.h
+    /// @link: src/fpsgame/game.h:367
     class player_state_t 
     {
     public:
@@ -205,6 +205,204 @@ namespace sdk
         ///------------------- Constructors ---------------///
 
         player_state_t() : m_imaxhealth(100), m_iaitype(AI_NONE), m_iskill(0) { };
+
+        ///---------------- Member Functions -------------///
+
+        /*
+
+        void baseammo(int gun, int k = 2, int scale = 1)
+    {
+        ammo[gun] = (itemstats[gun-GUN_SG].add*k)/scale;
+    }
+
+    void addammo(int gun, int k = 1, int scale = 1)
+    {
+        itemstat &is = itemstats[gun-GUN_SG];
+        ammo[gun] = min(ammo[gun] + (is.add*k)/scale, is.max);
+    }
+
+    bool hasmaxammo(int type)
+    {
+       const itemstat &is = itemstats[type-I_SHELLS];
+       return ammo[type-I_SHELLS+GUN_SG]>=is.max;
+    }
+
+    bool canpickup(int type)
+    {
+        if(type<I_SHELLS || type>I_QUAD) return false;
+        itemstat &is = itemstats[type-I_SHELLS];
+        switch(type)
+        {
+            case I_BOOST: return maxhealth<is.max || health<maxhealth;
+            case I_HEALTH: return health<maxhealth;
+            case I_GREENARMOUR:
+                // (100h/100g only absorbs 200 damage)
+                if(armourtype==A_YELLOW && armour>=100) return false;
+            case I_YELLOWARMOUR: return !armourtype || armour<is.max;
+            case I_QUAD: return quadmillis<is.max;
+            default: return ammo[is.info]<is.max;
+        }
+    }
+
+    void pickup(int type)
+    {
+        if(type<I_SHELLS || type>I_QUAD) return;
+        itemstat &is = itemstats[type-I_SHELLS];
+        switch(type)
+        {
+            case I_BOOST:
+                maxhealth = min(maxhealth+is.info, is.max);
+            case I_HEALTH: // boost also adds to health
+                health = min(health+is.add, maxhealth);
+                break;
+            case I_GREENARMOUR:
+            case I_YELLOWARMOUR:
+                armour = min(armour+is.add, is.max);
+                armourtype = is.info;
+                break;
+            case I_QUAD:
+                quadmillis = min(quadmillis+is.add, is.max);
+                break;
+            default:
+                ammo[is.info] = min(ammo[is.info]+is.add, is.max);
+                break;
+        }
+    }
+
+    void respawn()
+    {
+        maxhealth = 100;
+        health = maxhealth;
+        armour = 0;
+        armourtype = A_BLUE;
+        quadmillis = 0;
+        gunselect = GUN_PISTOL;
+        gunwait = 0;
+        loopi(NUMGUNS) ammo[i] = 0;
+        ammo[GUN_FIST] = 1;
+    }
+
+    void spawnstate(int gamemode)
+    {
+        if(m_demo)
+        {
+            gunselect = GUN_FIST;
+        }
+        else if(m_insta)
+        {
+            armour = 0;
+            health = 1;
+            gunselect = GUN_RIFLE;
+            ammo[GUN_RIFLE] = 100;
+        }
+        else if(m_regencapture)
+        {
+            extern int regenbluearmour;
+            if(regenbluearmour)
+            {
+                armourtype = A_BLUE;
+                armour = 25;
+            }
+            gunselect = GUN_PISTOL;
+            ammo[GUN_PISTOL] = 40;
+            ammo[GUN_GL] = 1;
+        }
+        else if(m_tactics)
+        {
+            armourtype = A_GREEN;
+            armour = 100;
+            ammo[GUN_PISTOL] = 40;
+            int spawngun1 = rnd(5)+1, spawngun2;
+            gunselect = spawngun1;
+            baseammo(spawngun1, m_noitems ? 2 : 1);
+            do spawngun2 = rnd(5)+1; while(spawngun1==spawngun2);
+            baseammo(spawngun2, m_noitems ? 2 : 1);
+            if(m_noitems) ammo[GUN_GL] += 1;
+        }
+        else if(m_efficiency)
+        {
+            armourtype = A_GREEN;
+            armour = 100;
+            loopi(5) baseammo(i+1);
+            gunselect = GUN_CG;
+            ammo[GUN_CG] /= 2;
+        }
+        else if(m_ctf || m_collect)
+        {
+            armourtype = A_BLUE;
+            armour = 50;
+            ammo[GUN_PISTOL] = 40;
+            ammo[GUN_GL] = 1;
+        }
+        else if(m_sp)
+        {
+            if(m_dmsp) 
+            {
+                armourtype = A_BLUE;
+                armour = 25;
+            }
+            ammo[GUN_PISTOL] = 80;
+            ammo[GUN_GL] = 1;
+        }
+        else
+        {
+            armourtype = A_BLUE;
+            armour = 25;
+            ammo[GUN_PISTOL] = 40;
+            ammo[GUN_GL] = 1;
+        }
+    }
+
+    // just subtract damage here, can set death, etc. later in code calling this
+    int dodamage(int damage)
+    {
+        int ad = (damage*(armourtype+1)*25)/100; // let armour absorb when possible
+        if(ad>armour) ad = armour;
+        armour -= ad;
+        damage -= ad;
+        health -= damage;
+        return damage;
+    }
+
+    int hasammo(int gun, int exclude = -1)
+    {
+        return gun >= 0 && gun <= NUMGUNS && gun != exclude && ammo[gun] > 0;
+    }
+
+        */
+    };
+
+    /// Sauerbraten classifies this as a "string"
+    /// @link: src/shared/tools.h:158-159
+    typedef char string_t[260];
+
+    /// @brief Class Structure for all Player Entities.
+    class player_t : public dynamic_entity_t, public player_state_t 
+    {
+    public:
+
+        /// Weight, Client Number, Privledge level, Ping, Last Update, Action & Gun.
+        std::int32_t m_iweight, m_iclientn, m_iprivledge,
+                m_last_upd, m_plag, m_iping, m_isequence, m_irespawned, 
+                m_isuicide,m_last_pain, m_last_action, m_last_gun;
+        bool m_battacking;
+        std::int32_t m_iattack_sound, m_iattack_chan, m_idle_sound, 
+                m_idle_chan, m_last_taunt, m_last_pickup, m_last_pickup_millis, 
+                m_last_base, m_last_ammo, m_flagpickup, m_itokens;
+        vector_t m_vcollect;
+        /// Kills, Flags, Deaths, Shots & Damage.
+        std::int32_t m_ikills, m_iflags, m_ideaths, m_totaldamage, m_totalshots;
+        pad(m_editptr, 8ul);
+        /// Yaw, Pitch, Roll
+        float m_dyaw, m_dpitch, m_droll, m_nyaw, m_npitch, m_nroll;
+        std::int32_t m_smoothmillis;
+        /// Name, Team, Info, Player model number.
+        string_t m_sz_name, m_sz_team, m_sz_info;
+        std::int32_t m_imodel;
+        pad(m_ai, 8ul);
+        std::int32_t m_owner, m_lastnode;
+        /// Position of the gun muzzle.
+        vector_t m_vmuzzle;
     };
 
 

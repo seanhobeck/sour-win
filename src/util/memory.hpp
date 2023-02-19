@@ -9,8 +9,9 @@
 /// @uses: including std c++ 23 features.
 #include "../v23/print.h"
 
-/// @uses: unistd functions
+/// @uses: mmap, mprotec, sysconf, etc...
 #include <unistd.h>
+#include <sys/mman.h>
 
 /// @uses: dlfcn & intrinsics.
 #include <dlfcn.h>
@@ -36,11 +37,11 @@ namespace mem
     static void* 
     get_module(const std::string_view sz_module) noexcept
     {
-        ///                                    RTLD_LAZY 
+        /// RTLD_LAZY 
         if (void* __h = dlopen(sz_module.data(), 0x1))
             return __h;
 
-        return nullptr;
+        return 0;
     };
 
     /// @brief Get a exported functions address from a certain module.
@@ -57,7 +58,7 @@ namespace mem
         return (T) nullptr;
     };
     template<typename T> static T
-    get_exp_address(const std::string_view sz_function, const void* h_module) noexcept
+    get_exp_address(const std::string_view sz_function, void* h_module) noexcept
     {
         return (T) dlsym(h_module, sz_function.data());
     };

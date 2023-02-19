@@ -1,0 +1,1 @@
+sudo ./injector -n linux_64_client sour.so

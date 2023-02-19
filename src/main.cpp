@@ -11,7 +11,9 @@
 __attribute__((constructor))
 static void attach() 
 {
-    std::cout << "We attached" << std::endl;
+    __gnu_cxx::v23::println("[sour-%s]: attached", SOUR_VERSION);
+    
+    sdk::setup();
 };
 
 /// @brief Note this is very similar to __attribute__((section (.dtors)))
