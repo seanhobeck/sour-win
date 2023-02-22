@@ -8,6 +8,7 @@
 
 /// @uses: player_t, dynamic_entity_t, phys_entity_t, etc..
 #include "entity.hpp"
+#include "draw.hpp"
 
 /// @uses: log:: [namespace]
 #include "log.hpp"
@@ -33,8 +34,8 @@ namespace g
     /// @note: Pointer to the entity list.
     static sdk::entity_list* p_list;
 
-    /// @note: Pointer to the view matrix.
-    static float* p_matrix;
+    /// @note: Pointer to the player count.
+    static std::int32_t* p_playercount;
 };
 
 
@@ -47,7 +48,7 @@ namespace hk
     typedef HDC hdc_t;
     typedef HGLRC hctx_t;
     /// Type definition for swapbuffers.
-    typedef std::int32_t(__stdcall *wgl_swapbuffers_t)(hdc_t, std::uint32_t);
+    typedef std::int32_t(__stdcall* wgl_swapbuffers_t)(hdc_t, std::uint32_t);
 
 
     /// Game & Client contexts.
@@ -62,13 +63,25 @@ namespace hk
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
 
+        /// Getting Screen Size
         std::int32_t m_viewport[4];
         glGetIntegerv(GL_VIEWPORT, m_viewport);
         glOrtho(0.0, m_viewport[2], m_viewport[3], 0.0, 1.0, -1.0);
+        g::p_width = m_viewport[2];
+        g::p_height = m_viewport[3];
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glClearColor(0, 0, 0, 1.0);
+    };
+    /// Getting the screen size.
+    static void get_screen_size() 
+    {
+        std::int32_t m_viewport[4];
+        glGetIntegerv(GL_VIEWPORT, m_viewport);
+        glOrtho(0.0, m_viewport[2], m_viewport[3], 0.0, 1.0, -1.0);
+        g::p_width = m_viewport[2];
+        g::p_height = m_viewport[3];
     };
     /// Original Swapbuffers function.
     static wgl_swapbuffers_t o_swapbuffers;
@@ -87,10 +100,11 @@ namespace hk
             cr_ctx = false;
         };
 
-        /// Start frame
+        /// Start frame & Updating the frame size.
         wglMakeCurrent(p_hdc, g_cli);
-
+        get_screen_size();
         
+
         /// Render whatever...
 
 
@@ -168,11 +182,6 @@ namespace sdk
         /**
          *
          *
-         *
-         *
-         *
-         *
-         *
          **/
          /// @note: Non-direct import.
         gp_base = GetModuleHandleA(0);
@@ -190,9 +199,13 @@ namespace sdk
         g::p_local = (sdk::player_t*)((std::uint64_t)gp_base + (std::uint64_t)0x3472D0);
         g::p_list = (sdk::entity_list*)((std::uint64_t)gp_base + (std::uint64_t)0x346C90);
         g::p_matrix = (float*)((std::uint64_t)gp_base + (std::uint64_t)0x32D040);
-
+        g::p_playercount = (std::int32_t*)((std::uint64_t)gp_base + (std::uint64_t)0x346C9C);
         
-        if (g::p_local != nullptr && g::p_list != nullptr)
+        /// Sanity checking.
+        if (g::p_local != nullptr && 
+            g::p_list != nullptr && 
+            g::p_matrix != nullptr && 
+            g::p_playercount != nullptr)
             l::log("intialized globals");
         else
             l::log("improper offsets");

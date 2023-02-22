@@ -92,6 +92,22 @@ struct vector_t
     {
         return std::sqrt(x * x + y * y + z * z);
     };
+    float distance(const vector_t& other) const
+    {
+        return vector_t(this->x - other.x, this->y - other.y, this->z - other.z).length();
+    };
+};
+
+/// @note: Type definition.
+typedef vector_t angle_t;
+
+/// @brief Getting the angle to the other player.
+/// @returns the Angle to the entity provided.
+static angle_t
+angle_to(const vector_t& o, const vector_t& e) 
+{
+    return angle_t(-std::atan2f(e.x - o.x, e.y - o.y) * (3.1415927f / 180.f) + 360.f,
+        std::asinf((e.z - o.z) / o.distance(e)) * (3.1415927f / 180.f), 0.f);
 };
 
 /// @brief Basic structure for a vector4 / quaternion

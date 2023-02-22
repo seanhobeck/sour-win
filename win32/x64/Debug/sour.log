@@ -1,10 +1,4 @@
-﻿  buffer.c
-  hde32.c
-  hde64.c
-  hook.c
-  trampoline.c
-  Generating Code...
-  dllmain.cpp
+﻿  dllmain.cpp
 C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(25,35): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
 C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(25,44): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
 C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(27,38): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
@@ -25,21 +19,21 @@ C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(45,64): warning C4244: 'initi
 C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(47,59): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(47,66): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(47,73): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(106,37): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(106,46): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(106,55): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(106,64): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(108,40): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(108,49): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(108,58): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(108,67): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(109,59): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(109,66): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(109,73): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(109,80): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(111,71): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(111,78): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(111,85): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(111,92): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(122,37): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(122,46): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(122,55): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(122,64): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(124,40): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(124,49): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(124,58): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(124,67): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(125,59): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(125,66): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(125,73): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(125,80): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(127,71): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(127,78): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(127,85): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\main\Desktop\github\C\sour\win32\geom.hpp(127,92): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\main\Desktop\github\C\sour\win32\entity.hpp(249,39): warning C5056: operator '==': deprecated for array types
   sour.vcxproj -> C:\Users\main\Desktop\github\C\sour\win32\x64\Debug\sour.dll
