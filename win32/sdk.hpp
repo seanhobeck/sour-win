@@ -16,14 +16,6 @@
 /// @uses:: MH_Initialize
 #include "dependencies/minhook.h"
 
-/// @uses: opengl32, SDL2, tlhelp32
-#pragma comment(lib, "OpenGL32.lib")
-#include <GL/gl.h>
-#include <SDL.h>
-#include <SDL_opengl.h>
-#include <TlHelp32.h>
-#include <Psapi.h>
-#include <intrin.h>
 
 /// @brief Namespace for globals.
 namespace g 
@@ -223,7 +215,10 @@ namespace sdk
         else
             l::log("hooked wglSwapBuffers");
 
-        /// Hooking the exported function.
+        /// Hooking the exported keypress function
+        ///
+        /// @ref console.cpp:550 ->     processkey(std::int32_t, bool, std::int32_t)
+        ///
         if (!hk::hook(mem::get_exp_address<hk::sdl_pollevent_t>("SDL_PollEvent", gp_sdl2),
             hk::_h_pollevent, (void**)&hk::o_pollevent))
             l::log("unable to hook SDL_PollEvent");

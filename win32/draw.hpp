@@ -9,6 +9,15 @@
 /// @uses: point_t, vector_t, quatern_t, etc..
 #include "geom.hpp"
 
+/// @uses: opengl32, SDL2, tlhelp32
+#pragma comment(lib, "OpenGL32.lib")
+#include <GL/gl.h>
+#include <SDL.h>
+#include <SDL_opengl.h>
+#include <TlHelp32.h>
+#include <Psapi.h>
+#include <intrin.h>
+
 
 /// @brief Global namespace.
 namespace g 
@@ -57,5 +66,17 @@ namespace d
 		return true;
 	};
 	
-
+	static void 
+	rect(const point_t& _orig, const point_t& _sz, const color_t color, const float width = 1.5f)
+	{
+		glLineWidth(width);
+		glBegin(GL_LINE_STRIP);
+		glColor4ub(color.r, color.g, color.b, color.a);
+		glVertex2f(_orig.x - 0.5f, _orig.y - 0.5f);
+		glVertex2f(_orig.x + _sz.x + 0.5f, _orig.y - 0.5f);
+		glVertex2f(_orig.x + _sz.x + 0.5f, _orig.y + _sz.y + 0.5f);
+		glVertex2f(_orig.x - 0.5f, _orig.y + _sz.y + 0.5f);
+		glVertex2f(_orig.x - 0.5f, _orig.y - 0.5f);
+		glEnd();
+	};
 };
