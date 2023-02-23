@@ -1,1 +1,2 @@
 C:\Users\main\Desktop\github\C++\sour\x64\Release\sour.dll
+C:\Users\main\Desktop\github\C\sour\win32\x64\Release\sour.dll

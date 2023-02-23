@@ -15,6 +15,7 @@
 
 /// @uses:: MH_Initialize
 #include "dependencies/minhook.h"
+#include <format>
 
 
 /// @brief Namespace for globals.
@@ -108,21 +109,23 @@ namespace hk
 
 
 
-    typedef SDL_Event* sdl_event_t;
-    /// Type definition for sdl_pollevent.
-    typedef std::int32_t(__cdecl* sdl_pollevent_t)(sdl_event_t);
+    /// Type definition for process_key.
+    typedef void(__fastcall *process_key_t)(std::int32_t, bool, std::int32_t);
 
-    /// Original Pollevent function.
-    static sdl_pollevent_t o_pollevent;
-    /// @brief Hook for SDL_PollEvent.
-    /// @param p_event The event to be polled.
-    static std::int32_t __cdecl
-    _h_pollevent(sdl_event_t p_event) 
+    /// Original Processkey function.
+    static process_key_t o_process_key;
+    /// @brief Hook for Processkey.
+    /// @param _key Keysym pressed.
+    /// @param _down If the key was pressed down.
+    /// @param _modstate ?
+    static void __fastcall
+    _h_process_key(std::int32_t _key, bool _down, std::int32_t _modstate) 
     {
-        if (p_event->type == SDL_EventType::SDL_KEYDOWN)
-            std::cout << "Key Pressed Down: " << p_event->key.keysym.sym << std::endl;
+        if (_down && _key > 0) {
+            l::log(std::format("key down: {}", _key));
+        }
 
-        return o_pollevent(p_event);
+        o_process_key(_key, _down, _modstate);
     };
 
 
@@ -217,13 +220,13 @@ namespace sdk
 
         /// Hooking the exported keypress function
         ///
-        /// @ref console.cpp:550 ->     processkey(std::int32_t, bool, std::int32_t)
+        /// @ref engine/console.cpp:550 ->     void processkey(std::int32_t, bool, std::int32_t)
         ///
-        if (!hk::hook(mem::get_exp_address<hk::sdl_pollevent_t>("SDL_PollEvent", gp_sdl2),
-            hk::_h_pollevent, (void**)&hk::o_pollevent))
-            l::log("unable to hook SDL_PollEvent");
+        if (!hk::hook((hk::process_key_t)((std::uint64_t)gp_base + (std::uint64_t)0x1A0260), 
+            hk::_h_process_key, (void**)&hk::o_process_key))
+            l::log("unable to hook processkey()");
         else
-            l::log("hooked SDL_PollEvent");
+            l::log("hooked processkey()");
 
         /// Enabling all of the hooks.
         hk::enable();
