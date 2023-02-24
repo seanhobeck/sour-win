@@ -228,6 +228,10 @@ namespace sdk
         bool dontmove, becareful, tryreset, trywipe;
     };
 
+
+    ///------- @section: Player Information --------///
+
+
     /// Sauerbraten classifies this as a "string"
     /// @link: src/shared/tools.h:158-159
     typedef char string_t[260];
@@ -314,6 +318,47 @@ namespace sdk
             return entities[idx];
         };
     };
+
+
+    /// @brief Filler class (two vec4s).
+    struct dual_t 
+    {
+        /// The two quaternions (vec4s).
+        quatern_t a, b;
+
+        dual_t() = default;
+    };
+
+    /// @brief Structure for information on Bones.
+    class bone_info_t 
+    {
+    public:
+        /// Name of the bone.
+        string_t m_sz_name;
+        /// Bone index information.
+        std::int32_t m_iparent, m_ichild, m_inext, m_igroup, 
+            m_ischeduled, m_interpindex, m_interp_parent, 
+            m_iragdoll_index, m_index;
+        /// Scale, offset, min, max
+        float m_flscale, m_floffset, m_flmin, m_flmax;
+
+        /// Base Quaternion and Inverse Base Quaternion
+        dual_t m_qbase, m_qinv_base;
+
+
+        ///------ Constructors -------///
+
+
+        boneinfo_t() : m_sz_name(0), m_iparent(-1), m_ichild(-1), 
+            m_inext(-1), m_igroup(std::numeric_limits<std::int32_t>::max()), 
+            m_ischeduled(-1), m_interpindex(-1), m_interpparent(-1), 
+            m_iragdollindex(-1), m_index(-1), m_flscale(0), m_floffset(0), 
+            m_flmin(0), m_flmax(0) { /* Do nothing. */ };
+    };
+
+
+
+    ///--------- @section: SDK functions ----------///
 
 
     /// @brief Get the name of a animation
