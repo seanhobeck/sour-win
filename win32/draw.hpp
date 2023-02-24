@@ -46,7 +46,7 @@ namespace d
 	/// @brief World to screen function.
 	/// @returns If the world to screen was possible.
 	static bool
-	wts(const vector_t& o, point_t& _ref) 
+	wts(vector_t o, point_t& _ref) 
 	{
 		quatern_t _mbp;
 		_mbp.x = o.x * g::p_matrix[0] + o.y * g::p_matrix[4] + o.z * g::p_matrix[8] + g::p_matrix[12];
@@ -62,21 +62,32 @@ namespace d
 		_t.y = _mbp.y / _mbp.w;
 
 		_ref.x = (g::p_width / 2 * _t.x) + (_t.x + g::p_width / 2);
-		_ref.x = -(g::p_height / 2 * _t.y) + (_t.y + g::p_height / 2);
+		_ref.y = -(g::p_height / 2 * _t.y) + (_t.y + g::p_height / 2);
 		return true;
 	};
 	
 	static void 
-	rect(const point_t& _orig, const point_t& _sz, const color_t color, const float width = 1.5f)
+	rect(const point_t& _orig, const float w, const float h, const color_t color, const float width = 1.5f)
 	{
 		glLineWidth(width);
 		glBegin(GL_LINE_STRIP);
 		glColor4ub(color.r, color.g, color.b, color.a);
-		glVertex2f(_orig.x - 0.5f, _orig.y - 0.5f);
-		glVertex2f(_orig.x + _sz.x + 0.5f, _orig.y - 0.5f);
-		glVertex2f(_orig.x + _sz.x + 0.5f, _orig.y + _sz.y + 0.5f);
-		glVertex2f(_orig.x - 0.5f, _orig.y + _sz.y + 0.5f);
-		glVertex2f(_orig.x - 0.5f, _orig.y - 0.5f);
+		glVertex2f(_orig.x + w, _orig.y);
+		glVertex2f(_orig.x + w, _orig.y + h);
+		glVertex2f(_orig.x - w, _orig.y + h);
+		glVertex2f(_orig.x - w, _orig.y);
+		glVertex2f(_orig.x + w, _orig.y);
+		glEnd();
+	};
+
+	static void
+	line(const point_t& _to, const point_t& _from, const color_t color, const float width = 1.5f)
+	{
+		glLineWidth(width);
+		glBegin(GL_LINES);
+		glColor4ub(color.r, color.g, color.b, color.a);
+		glVertex2f(_from.x, _from.y);
+		glVertex2f(_to.x, _to.y);
 		glEnd();
 	};
 };

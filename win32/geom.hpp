@@ -34,7 +34,7 @@ struct point_t
 struct vector_t
 {
     /// xyz, rgb, v, etc...
-    union { struct { float x, y, z; }; struct { float r, g, b; }; float v[3]; };
+    union { struct { float x, y, z; }; };
 
     ///--------------- Explicit Constructors -------------------///
 

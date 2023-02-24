@@ -23,6 +23,14 @@
 #define pad(nm, bytes) std::uint8_t nm [bytes];
 /// @note: Create padding with a size.
 #define pad_sz(nm, n, type) std::uint8_t nm [n * sizeof(type)];
+#define str_merge_impl(a, b) a##b
+#define str_merge(a, b) str_merge_impl(a, b)
+/// @note: Create padding.
+#define __pad(size) str_merge(_pad,__COUNTER__)[size]
+/// @note: Defining Member offset.
+#define def_offset(type, name, offset) struct { unsigned char __pad(offset); type name; }
+/// @note: Defining offset.
+#define def(type, name) struct { type name; }
 
 /// @brief Namespace for logging out to our seperate console.
 namespace mem

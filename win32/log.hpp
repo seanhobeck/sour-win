@@ -13,7 +13,7 @@
 #include <string_view>
 
 /// Defining your sour version.
-#define SOUR_VERSION "v1.6"
+#define SOUR_VERSION "v2.1"
 
 /// @brief: Namespace for all things logging.
 namespace l

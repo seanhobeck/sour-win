@@ -22,6 +22,9 @@
     <Filter Include="Header Files\config">
       <UniqueIdentifier>{a0526bdb-e3ec-4ca3-8db6-37073723ff85}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\hack">
+      <UniqueIdentifier>{0f44b220-babd-4cd0-ae91-90f628e1b0aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.hpp">
@@ -71,6 +74,9 @@
     </ClInclude>
     <ClInclude Include="draw.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="esp.hpp">
+      <Filter>Header Files\hack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -79,15 +79,18 @@ namespace sdk
             m_delta, m_new;
         /// Yaw, Pitch, Roll, Max speed, radius & height.
         float m_flyaw, m_flpitch, m_flroll,
-            m_flmaxspeed, m_flradius, m_flheight,
+            m_flmaxspeed;
+        std::int32_t m_inair;
+        float m_flradius, m_flheight,
             m_flaboveeye, m_flxrad, m_flyrad, m_flzmarg;
         vector_t m_floor;
-        std::uint16_t m_airtime;
-        std::uint8_t m_bwater;
+        std::int32_t m_bwater;
         bool m_bjumping;
-        std::uint16_t m_move, m_strafe;
+        std::int8_t m_move, m_strafe;
         std::uint8_t m_phys, m_state, m_edit,
-            m_type, m_collide, m_blocked;
+            m_type, m_collide;
+        bool m_blocked;
+
 
 
         ///----------------- Constructors ------------------///
@@ -111,7 +114,7 @@ namespace sdk
         /// @return Position of the feet of the entity.
         vector_t get_feet_origin(float fl_offset = 0.f)
         {
-            return m_origin - vector_t(0.f, m_flheight + fl_offset, 0.f);
+            return m_origin - vector_t(0.f, 0.f, m_flheight + fl_offset);
         };
 
         /// @brief Getting the position of the head of the entity.
@@ -119,7 +122,7 @@ namespace sdk
         /// @return Position of the head of the entity.
         vector_t get_head_origin(float fl_offset = 0.f)
         {
-            return m_origin - vector_t(0.f, fl_offset, 0.f);
+            return m_origin - vector_t(0.f, m_flheight + fl_offset, 0.f);
         };
     };
 
@@ -165,21 +168,19 @@ namespace sdk
     public:
 
         /// Different types of input. (left, right, up, down)
-        std::uint8_t m_input[4];
+        bool m_left, m_right, m_up, m_down;
         /// Padding.
-        pad_sz(m_light, 1ul, ent_light_t);
+        void* m_light;
         /// Animation Interpolation, Ragdoll pointer, Occlude Query.
-        interp_info_t m_animations[3];
-        ragdoll_data_t* m_pragdoll;
-        occlude_query_t* m_pquery;
+        void* m_animations;
+        void* m_pragdoll;
+        void* m_pquery;
         /// Last time it was rendered.
-        std::int32_t m_ilastrender;
-        /// If the entity is occluded.
-        std::uint8_t m_boccluded;
+        std::int32_t m_ioccluded, m_ilastrendered;
 
         ///------------ Constructors & Destructors -------------///
 
-        dynamic_entity_t() : m_ilastrender(0), m_boccluded(0), m_pquery(nullptr), m_pragdoll(nullptr)
+        dynamic_entity_t() : m_ilastrendered(0), m_ioccluded(0), m_pquery(nullptr), m_pragdoll(nullptr)
         {
             reset();
         };
@@ -207,6 +208,26 @@ namespace sdk
         player_state_t() : m_imaxhealth(100), m_iaitype(AI_NONE), m_iskill(0) { };
     };
 
+    /// @brief Class structure for ai state.
+    class ai_state_t
+    {
+        int type, millis, targtype, target, idle;
+        bool override;
+    };
+
+    /// @brief Class structure for ai info.
+    class ai_info_t
+    {
+    public:
+        std::vector<ai_state_t> state;
+        std::vector<std::int32_t> route;
+        vector_t target, spot;
+        int enemy, enemyseen, enemymillis, weappref, prevnodes[6], targnode, targlast, targtime, targseq,
+            lastrun, lasthunt, lastaction, lastcheck, jumpseed, jumprand, blocktime, huntseq, blockseq, lastaimrnd;
+        float targyaw, targpitch, views[3], aimrnd[3];
+        bool dontmove, becareful, tryreset, trywipe;
+    };
+
     /// Sauerbraten classifies this as a "string"
     /// @link: src/shared/tools.h:158-159
     typedef char string_t[260];
@@ -215,7 +236,34 @@ namespace sdk
     class player_t : public dynamic_entity_t, public player_state_t
     {
     public:
-
+        /// @brief For all of the data (to be updated.) 
+        
+        /*
+        union
+        {
+            def_offset(float, left, 0xC);
+            def_offset(float, forward, 0x10);
+            def_offset(float, up, 0x14);
+            def_offset(vector_t, manual_velocity, 0x18);
+            def_offset(vector_t, position, 0x30);
+            def_offset(float, yaw, 0x3C);
+            def_offset(float, pitch, 0x40);
+            def_offset(float, height, 0x50);
+            def_offset(float, nametag_offset, 0x54);
+            def_offset(float, width, 0x58);
+            def_offset(bool, dead, 0x77);
+            def_offset(std::int32_t, health, 0x178);
+            def_offset(std::int32_t, max_health, 0x17C);
+            def_offset(std::int32_t, armor, 0x180);
+            def_offset(std::int32_t, quad_damage_time, 0x188); // time is in milliseconds (1000ms, 2000ms)
+            def_offset(std::int32_t, weapon_id, 0x18C);
+            def_offset(std::int32_t, firerate, 0x190);
+            def_offset(int, ammo[6], 0x198);
+            def_offset(char, name[16], 0x274);
+            def_offset(char, team[5], 0x378);
+        };
+        */
+        /**/
         /// Weight, Client Number, Privledge level, Ping, Last Update, Action & Gun.
         std::int32_t m_iweight, m_iclientn, m_iprivledge,
             m_last_upd, m_plag, m_iping, m_isequence, m_irespawned,
@@ -238,31 +286,24 @@ namespace sdk
         std::int32_t m_owner, m_lastnode;
         /// Position of the gun muzzle.
         vector_t m_vmuzzle;
-
-
+        
+    public:
+        
         ///-------------- Clean Functions ----------------///
 
-
-        /// @brief Checks if we are on the same team.
-        bool team(const player_t* p_local) 
-        {
-            return p_local->m_sz_team == this->m_sz_team;
-        };
-
-        /// @brief Checks if we are alive.
-        bool alive() 
-        {
-            return this->m_ihealth > 0;
-        };
+        //vector_t get_head_origin() { return this->position; };
+        //vector_t get_origin() { auto origin = this->position; origin.z -= 15; return origin; }
+        bool is_valid() { return uintptr_t(this) && this != nullptr && this->m_ihealth > 0; }
     };
 
     /// @brief: Class for the entity list.
     class entity_list 
     {
-    public:
-
+    private:
         /// @note: List of entities.
-        player_t* entities[33ul];
+        player_t* entities[33];
+
+    public:
 
         /// Default constructor.
         entity_list() = default;
@@ -270,10 +311,7 @@ namespace sdk
         /// @note: Gets a entity at the index, otherwise it throws std::out_of_range exception.
         player_t* get_entity(const std::size_t idx) 
         {
-            if (idx <= 33ul)
-                return entities[idx];
-
-            throw std::out_of_range("Entity List out of range.");
+            return entities[idx];
         };
     };
 
@@ -298,4 +336,18 @@ namespace sdk
         try { return std::make_optional<std::string>(anims[eanim]); }
         catch (...) { return std::nullopt; }
     };
+};
+
+
+/// @brief Namespace for globals.
+namespace g
+{
+    /// @note: Pointer to the local player (us).
+    static sdk::player_t* p_local;
+
+    /// @note: Pointer to the entity list.
+    static sdk::entity_list* p_list;
+
+    /// @note: Pointer to the player count.
+    static std::int32_t* p_playercount;
 };

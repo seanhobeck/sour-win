@@ -169,6 +169,7 @@
     <ClInclude Include="draw.hpp" />
     <ClInclude Include="entity.hpp" />
     <ClInclude Include="enum.hpp" />
+    <ClInclude Include="esp.hpp" />
     <ClInclude Include="geom.hpp" />
     <ClInclude Include="log.hpp" />
     <ClInclude Include="memory.hpp" />
