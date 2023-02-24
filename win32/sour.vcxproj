@@ -167,6 +167,7 @@
     <ClInclude Include="dependencies\minhook.h" />
     <ClInclude Include="dependencies\trampoline.h" />
     <ClInclude Include="draw.hpp" />
+    <ClInclude Include="engine.h" />
     <ClInclude Include="entity.hpp" />
     <ClInclude Include="enum.hpp" />
     <ClInclude Include="esp.hpp" />

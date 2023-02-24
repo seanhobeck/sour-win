@@ -1,7 +1,7 @@
 /**
  *
  *      @author Sean Hobeck
- *       @date 02-20-2023
+ *       @date 02-24-2023
  *
  **/
 #pragma once
@@ -43,7 +43,7 @@ namespace esp
 
 			/// Getting the height, width, head, and feet position of our indexed player
 			vector_t h = p_plr->m_new, n = p_plr->m_new;
-			n.z -= 11.5f;
+			n.z -= 12.5f;
 
 			/// World-to-screen positions
 			point_t _n, _h;
@@ -57,10 +57,10 @@ namespace esp
 				/// Creating a healthbar on the side.
 				point_t g = _n;
 				g.x -= sz / 3.5f;
-				d::rect(g, 0, sz, d::color_t(0, 0, 0, 255), 3.f);
-				d::rect(g, 0, sz, d::color_t(255, 15, 25, 255));
-				d::rect(g, 0, sz * (p_plr->m_ihealth / p_plr->m_imaxhealth), d::color_t(15, 255, 25, 255));
-				std::cout << p_plr->m_sz_name << ": " << p_plr->m_ihealth << std::endl;
+				float hp = sz * (p_plr->m_ihealth / p_plr->m_imaxhealth);
+				d::line(g, point_t(g.x, g.y + sz), d::color_t(0, 0, 0, 255), 3.f);
+				d::line(g, point_t(g.x, g.y + sz), d::color_t(255, 15, 25, 255));
+				d::line(g, point_t(g.x, g.y + hp), d::color_t(15, 255, 25, 255));
 			};
 		};
 	};

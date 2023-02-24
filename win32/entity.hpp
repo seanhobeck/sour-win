@@ -80,11 +80,11 @@ namespace sdk
         /// Yaw, Pitch, Roll, Max speed, radius & height.
         float m_flyaw, m_flpitch, m_flroll,
             m_flmaxspeed;
-        std::int32_t m_inair;
         float m_flradius, m_flheight,
             m_flaboveeye, m_flxrad, m_flyrad, m_flzmarg;
         vector_t m_floor;
-        std::int32_t m_bwater;
+        std::uint16_t m_inair;
+        std::uint8_t m_water;
         bool m_bjumping;
         std::int8_t m_move, m_strafe;
         std::uint8_t m_phys, m_state, m_edit,
@@ -133,7 +133,7 @@ namespace sdk
         std::int32_t m_ianim, m_iframe, m_irange, m_ibasetime;
         /// Animation speed.
         float m_flspeed;
-        pad(_vs, 4ul);
+        std::uint32_t m_iseed;
 
         ///------------------- Operators --------------------///
 
@@ -170,17 +170,18 @@ namespace sdk
         /// Different types of input. (left, right, up, down)
         bool m_left, m_right, m_up, m_down;
         /// Padding.
-        void* m_light;
+        ent_light_t m_light;
         /// Animation Interpolation, Ragdoll pointer, Occlude Query.
-        void* m_animations;
-        void* m_pragdoll;
-        void* m_pquery;
+        interp_info_t m_animations[3];
+        ragdoll_data_t* m_pragdoll;
+        occlude_query_t* m_pquery;
         /// Last time it was rendered.
-        std::int32_t m_ioccluded, m_ilastrendered;
+        std::int32_t m_ilastrendered;
+        std::uint8_t m_uoccluded;
 
         ///------------ Constructors & Destructors -------------///
 
-        dynamic_entity_t() : m_ilastrendered(0), m_ioccluded(0), m_pquery(nullptr), m_pragdoll(nullptr)
+        dynamic_entity_t() : m_ilastrendered(0), m_uoccluded(0), m_pquery(nullptr), m_pragdoll(nullptr)
         {
             reset();
         };
@@ -279,14 +280,14 @@ namespace sdk
         vector_t m_vcollect;
         /// Kills, Flags, Deaths, Shots & Damage.
         std::int32_t m_ikills, m_iflags, m_ideaths, m_totaldamage, m_totalshots;
-        pad(m_editptr, 8ul);
+        void* m_editptr;
         /// Yaw, Pitch, Roll
         float m_dyaw, m_dpitch, m_droll, m_nyaw, m_npitch, m_nroll;
         std::int32_t m_smoothmillis;
         /// Name, Team, Info, Player model number.
         string_t m_sz_name, m_sz_team, m_sz_info;
         std::int32_t m_imodel;
-        pad(m_ai, 8ul);
+        void* m_ai_ptr;
         std::int32_t m_owner, m_lastnode;
         /// Position of the gun muzzle.
         vector_t m_vmuzzle;
@@ -349,11 +350,12 @@ namespace sdk
         ///------ Constructors -------///
 
 
+         /*
         boneinfo_t() : m_sz_name(0), m_iparent(-1), m_ichild(-1), 
             m_inext(-1), m_igroup(std::numeric_limits<std::int32_t>::max()), 
             m_ischeduled(-1), m_interpindex(-1), m_interpparent(-1), 
             m_iragdollindex(-1), m_index(-1), m_flscale(0), m_floffset(0), 
-            m_flmin(0), m_flmax(0) { /* Do nothing. */ };
+            m_flmin(0), m_flmax(0) { /* Do nothing. * };*/
     };
 
 

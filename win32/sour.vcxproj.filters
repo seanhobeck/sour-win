@@ -78,6 +78,9 @@
     <ClInclude Include="esp.hpp">
       <Filter>Header Files\hack</Filter>
     </ClInclude>
+    <ClInclude Include="engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

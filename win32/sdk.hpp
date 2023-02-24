@@ -9,6 +9,9 @@
 /// @uses: player_t, dynamic_entity_t, phys_entity_t, etc..
 #include "esp.hpp"
 
+/// @uses: hooking engine functions.
+#include "engine.h"
+
 /// @uses: log:: [namespace]
 #include "log.hpp"
 
@@ -34,21 +37,15 @@ namespace hk
     ///----------------- @section Hooks -------------------///
 
 
-    typedef HDC hdc_t;
-    typedef HGLRC hctx_t;
-    /// Type definition for swapbuffers.
-    typedef std::int32_t(__stdcall* wgl_swapbuffers_t)(hdc_t, std::uint32_t);
-
-
     /// Game & Client contexts.
-    static hctx_t g_cli;
+    static engine::hctx_t g_cli;
     /// Original Swapbuffers function.
-    static wgl_swapbuffers_t o_swapbuffers;
+    static engine::wgl_swapbuffers_t o_swapbuffers;
     /// @brief Hook for wglSwapBuffers.
     /// @param p_hdc HDC pointer.
     /// @param q_unk Unknown.
     static std::int32_t __stdcall
-    _h_swapbuffers(hdc_t p_hdc, std::uint32_t d_unk)
+    _h_swapbuffers(engine::hdc_t p_hdc, std::uint32_t d_unk)
     {
         static bool cr_ctx = true;
 
@@ -103,8 +100,6 @@ namespace hk
 
 
         /// End frame.
-        //glPopMatrix();
-        //glPopAttrib();
         wglMakeCurrent(hdc, ctx);
 
         return o_swapbuffers(p_hdc, d_unk);
@@ -112,11 +107,8 @@ namespace hk
 
 
 
-    /// Type definition for process_key.
-    typedef void(__fastcall *process_key_t)(std::int32_t, bool, std::int32_t);
-
     /// Original Processkey function.
-    static process_key_t o_process_key;
+    static engine::process_key_t o_process_key;
     /// @brief Hook for Processkey.
     /// @param _key Keysym pressed.
     /// @param _down If the key was pressed down.
@@ -125,12 +117,13 @@ namespace hk
     _h_process_key(std::int32_t _key, bool _down, std::int32_t _modstate) 
     {
         if (_down && _key > 0) {
-            if (_key == SDL_KeyCode::SDLK_INSERT)
+            if (_key == SDL_KeyCode::SDLK_HOME)
                 esp::toggle();
         }
 
         o_process_key(_key, _down, _modstate);
     };
+
 
 
     ///--------------- @section: Minhook -----------------///
@@ -208,7 +201,7 @@ namespace sdk
         hk::initialize();
 
         /// Hooking the exported function.
-        if (!hk::hook(mem::get_exp_address<hk::wgl_swapbuffers_t>("wglSwapBuffers", gp_opengl),
+        if (!hk::hook(mem::get_exp_address<engine::wgl_swapbuffers_t>("wglSwapBuffers", gp_opengl),
             hk::_h_swapbuffers, (void**)&hk::o_swapbuffers))
             l::log("unable to hook wglSwapBuffers");
         else
@@ -218,7 +211,7 @@ namespace sdk
         ///
         /// @ref engine/console.cpp:550 ->     void processkey(std::int32_t, bool, std::int32_t)
         ///
-        if (!hk::hook((hk::process_key_t)((std::uint64_t)gp_base + (std::uint64_t)0x1A0260), 
+        if (!hk::hook((engine::process_key_t)((std::uint64_t)gp_base + (std::uint64_t)0x1A0260),
             hk::_h_process_key, (void**)&hk::o_process_key))
             l::log("unable to hook processkey()");
         else
