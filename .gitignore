@@ -31,3 +31,17 @@
 *.out
 *.app
 *.ipch
+*.vsidx
+*.suo
+*.vs
+*.db
+*.pdb
+*.idb
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.tlog
+*.recipe
+*.ipdb
+*.iobj
+*.txt
