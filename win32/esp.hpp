@@ -62,7 +62,8 @@ namespace esp
 				/// Creating a healthbar on the side.
 				point_t g = _n;
 				g.x -= sz / 3.5f;
-				float hp = sz * (p_plr->m_ihealth / p_plr->m_imaxhealth);
+				float t = g.y + sz * 1.25f;
+				float hp = sz * ((float)p_plr->m_ihealth / (float)p_plr->m_imaxhealth);
 				d::line(g, point_t(g.x, g.y + sz), d::color_t(0, 0, 0, 255), 3.f);
 				d::line(g, point_t(g.x, g.y + sz), d::color_t(255, 15, 25, 255));
 				d::line(g, point_t(g.x, g.y + hp), d::color_t(15, 255, 25, 255));

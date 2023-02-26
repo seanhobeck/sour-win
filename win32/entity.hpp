@@ -243,32 +243,6 @@ namespace sdk
     public:
         /// @brief For all of the data (to be updated.) 
         
-        /*
-        union
-        {
-            def_offset(float, left, 0xC);
-            def_offset(float, forward, 0x10);
-            def_offset(float, up, 0x14);
-            def_offset(vector_t, manual_velocity, 0x18);
-            def_offset(vector_t, position, 0x30);
-            def_offset(float, yaw, 0x3C);
-            def_offset(float, pitch, 0x40);
-            def_offset(float, height, 0x50);
-            def_offset(float, nametag_offset, 0x54);
-            def_offset(float, width, 0x58);
-            def_offset(bool, dead, 0x77);
-            def_offset(std::int32_t, health, 0x178);
-            def_offset(std::int32_t, max_health, 0x17C);
-            def_offset(std::int32_t, armor, 0x180);
-            def_offset(std::int32_t, quad_damage_time, 0x188); // time is in milliseconds (1000ms, 2000ms)
-            def_offset(std::int32_t, weapon_id, 0x18C);
-            def_offset(std::int32_t, firerate, 0x190);
-            def_offset(int, ammo[6], 0x198);
-            def_offset(char, name[16], 0x274);
-            def_offset(char, team[5], 0x378);
-        };
-        */
-        /**/
         /// Weight, Client Number, Privledge level, Ping, Last Update, Action & Gun.
         std::int32_t m_iweight, m_iclientn, m_iprivledge,
             m_last_upd, m_plag, m_iping, m_isequence, m_irespawned,

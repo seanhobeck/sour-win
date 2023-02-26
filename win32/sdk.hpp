@@ -158,6 +158,8 @@ namespace hk
         return o_intersect(p_from, p_to, p_player, p_dist);
     };
 
+
+
     /// Original Connect function.
     static engine::connect_t o_game_connect;
     /// @brief Hook for gameconnect.

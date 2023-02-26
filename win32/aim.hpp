@@ -15,15 +15,6 @@
 #include <vector>
 
 
-/// @brief Namespace for the Aimbot functionality.
-namespace aim 
-{
-	static sdk::player_t*
-	get_closest() 
-	{
-		return nullptr;
-	};
-};
 
 /// @brief Namespace for Legit Aimbot.
 namespace legit 

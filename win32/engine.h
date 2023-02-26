@@ -50,6 +50,25 @@ namespace engine
     /// @ref: shared/igame.h:29, shared/igame.h:33
     typedef void(__fastcall* connect_t)(bool);
 
+    /// @brief Structure Unknown
+    struct model_t;
+
+    /// @brief Structure Unknown
+    struct model_attach_t 
+    {
+        const char *m_sz_tag, *m_sz_name;
+        std::int32_t m_ianim, m_ibase_time;
+        vector_t* m_p_origin;
+        model_t* m_p_model;
+    };
+
+    /// Type definition for  rendermodel()
+    /// 
+    /// @ref shared/iengine.h:436
+    typedef void(__fastcall* gle_mdl_t)
+        (sdk::ent_light_t*, const char*, std::int32_t, const vector_t*, float, float, std::int32_t,
+            sdk::dynamic_entity_t*, model_attach_t, std::int32_t, std::int32_t, float);
+
     /// @note: Namespace for net-based engine things.
     namespace net 
     {

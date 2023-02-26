@@ -66,6 +66,7 @@ namespace d
 		return true;
 	};
 	
+	/// @brief Drawing a rectangle.
 	static void 
 	rect(const point_t& _orig, const float w, const float h, const color_t color, const float width = 1.5f)
 	{
@@ -80,6 +81,7 @@ namespace d
 		glEnd();
 	};
 
+	/// @brief Drawing a line.
 	static void
 	line(const point_t& _to, const point_t& _from, const color_t color, const float width = 1.5f)
 	{
@@ -91,6 +93,7 @@ namespace d
 		glEnd();
 	};
 
+	/// @brief Drawing a circle.
 	static void
 	circle(const point_t& _pos, const float rad, const float width, const color_t color) 
 	{
@@ -106,4 +109,17 @@ namespace d
 		}
 		glEnd();
 	};
+
+
+	///----------- @section: Text Rendering -----------///
+
+
+	/// Type definition for rendering text.
+	/// 
+	/// @ref shared/iengine.h:257
+	typedef void(__fastcall* render_text_t) /// left, top, rgba = 0xFFFFFFFF (white), cursor-1, maxwidth-1
+		(const char*, std::int32_t, std::int32_t, std::int32_t, std::int32_t, std::int32_t, std::int32_t, std::int32_t, std::int32_t);
+
+	/// @ref -> 0x15fb80
+	static render_text_t text = nullptr;
 };
