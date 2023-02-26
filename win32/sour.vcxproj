@@ -157,6 +157,7 @@
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="aim.hpp" />
     <ClInclude Include="config.hpp" />
     <ClInclude Include="dependencies\buffer.h" />
     <ClInclude Include="dependencies\hde\hde32.h" />

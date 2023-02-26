@@ -90,4 +90,20 @@ namespace d
 		glVertex2f(_to.x, _to.y);
 		glEnd();
 	};
+
+	static void
+	circle(const point_t& _pos, const float rad, const float width, const color_t color) 
+	{
+		glLineWidth(width);
+		glBegin(GL_LINE_STRIP);
+		glColor4ub(color.r, color.g, color.b, color.a);
+
+		float fl_theta;
+		for (std::int32_t i = 0; i < 360; ++i)
+		{
+			fl_theta = i * 3.1415926535f / 180.f;
+			glVertex2f(_pos.x + rad * std::cos(fl_theta), _pos.y + (rad * std::sin(fl_theta)));
+		}
+		glEnd();
+	};
 };

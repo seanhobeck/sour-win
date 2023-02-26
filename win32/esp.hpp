@@ -1,12 +1,12 @@
 /**
  *
  *      @author Sean Hobeck
- *       @date 02-24-2023
+ *       @date 02-25-2023
  *
  **/
 #pragma once
 
- /// @uses: player_t, dynamic_entity_t, phys_entity_t, etc..
+/// @uses: player_t, dynamic_entity_t, phys_entity_t, etc..
 #include "entity.hpp"
 #include "draw.hpp"
 #include "log.hpp"
@@ -22,6 +22,11 @@ namespace esp
 	static void toggle() 
 	{ 
 		gb_t = !gb_t;
+
+		if (gb_t)
+			l::log("esp toggled");
+		else
+			l::log("esp un-toggled");
 	};
 
 
@@ -52,7 +57,7 @@ namespace esp
 			if (d::wts(n, _n) && d::wts(h, _h)) {
 				const float sz = (_h.y - _n.y);
 				d::rect(_n, sz / 5.f, sz, d::color_t(0, 0, 0, 255), 3.f);
-				d::rect(_n, sz / 5.f, sz, d::color_t(245, 125, 25, 255));
+				d::rect(_n, sz / 5.f, sz, d::color_t(255, 255, 255, 255));
 
 				/// Creating a healthbar on the side.
 				point_t g = _n;

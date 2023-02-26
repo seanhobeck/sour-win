@@ -45,3 +45,9 @@
 *.ipdb
 *.iobj
 *.txt
+*.vsidx
+win32/.vs/sour/v17/.suo
+*.db
+*.pdb
+*.tlog
+*.pdb

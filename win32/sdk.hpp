@@ -1,19 +1,20 @@
 /**
  *
  *      @author Sean Hobeck
- *       @date 02-20-2023
+ *       @date 02-25-2023
  *
  **/
 #pragma once
 
 /// @uses: player_t, dynamic_entity_t, phys_entity_t, etc..
 #include "esp.hpp"
+#include "aim.hpp"
 
 /// @uses: hooking engine functions.
 #include "engine.h"
 
-/// @uses: log:: [namespace]
-#include "log.hpp"
+/// @uses: log:: [namespace], config:: [namespace]
+#include "config.hpp"
 
 /// @uses:: MH_Initialize
 #include "dependencies/minhook.h"
@@ -63,8 +64,8 @@ namespace hk
             std::int32_t viewport[4];
             glGetIntegerv(GL_VIEWPORT, viewport);
             glViewport(0, 0, viewport[2], viewport[3]);
-            g::p_height = viewport[2];
-            g::p_width = viewport[3];
+            g::p_width = viewport[2];
+            g::p_height = viewport[3];
 
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
@@ -89,14 +90,19 @@ namespace hk
             cr_ctx = false;
         };
 
-        /// Start frame & Updating the frame size.
+        /// Start frame & Updating the frame size and View Matrix.
         wglMakeCurrent(p_hdc, g_cli);
-        //setup();
+        setup();
         g::p_matrix = reinterpret_cast<float*>((std::uint64_t)sdk::gp_base + 0x32D040);
         
 
+        /// Updating
+        if (legit::gb_t) 
+            legit::find();
+
         /// Render whatever...
         esp::render();
+        legit::fov();
 
 
         /// End frame.
@@ -117,13 +123,85 @@ namespace hk
     _h_process_key(std::int32_t _key, bool _down, std::int32_t _modstate) 
     {
         if (_down && _key > 0) {
-            if (_key == SDL_KeyCode::SDLK_HOME)
+            if (_key == SDL_KeyCode::SDLK_F5)
                 esp::toggle();
+            else if (_key == SDL_KeyCode::SDLK_F6)
+                legit::toggle();
+            //else if (_key == SDL_KeyCode::SDLK_F7)
+            //    rage::toggle();
         }
 
         o_process_key(_key, _down, _modstate);
     };
 
+
+
+    /// Original Intersect function.
+    static engine::intersect_t o_intersect;
+    /// @brief Hook for Intersect.
+    /// @param p_from From vector.
+    /// @param p_to To vector.
+    /// @param p_player Player to hit.
+    /// @param p_dist Best distance.
+    static sdk::dynamic_entity_t* __fastcall
+    _h_intersect(const vector_t* p_from, const vector_t* p_to, sdk::player_t* p_player, float* p_dist)
+    {
+        if (legit::gb_t && p_player == g::p_local)
+        {
+            auto trgt = legit::nearest;
+            
+            if (trgt != nullptr)
+                if (!strstr(trgt->m_sz_team, p_player->m_sz_team))
+                    return o_intersect(&p_player->m_new, &trgt->m_new, p_player, p_dist);
+        }
+
+        return o_intersect(p_from, p_to, p_player, p_dist);
+    };
+
+    /// Original Connect function.
+    static engine::connect_t o_game_connect;
+    /// @brief Hook for gameconnect.
+    static void __fastcall
+    _h_game_connect(bool _remote)
+    {
+        if (_remote)
+            l::log("connecting to local match");
+        else
+            l::log("connecting to match");
+
+        /// reinitializing
+        g::p_local = *reinterpret_cast<sdk::player_t**>((std::uint64_t)sdk::gp_base + 0x2A2560);
+        g::p_list = *reinterpret_cast<sdk::entity_list**>((std::uint64_t)sdk::gp_base + 0x346C90);
+        g::p_matrix = reinterpret_cast<float*>((std::uint64_t)sdk::gp_base + 0x32D040);
+        g::p_playercount = reinterpret_cast<std::int32_t*>((std::uint64_t)sdk::gp_base + 0x346C9C);
+
+        if (g::p_local != nullptr &&
+            g::p_list != nullptr &&
+            g::p_matrix != nullptr &&
+            g::p_playercount != nullptr)
+            l::log("reintialized globals");
+        else
+            l::log("unable to reinit globals");
+
+        o_game_connect(_remote);
+    };
+
+    /// Original Disconnect function.
+    static engine::connect_t o_game_disconnect;
+    /// @brief Hook for gamedisconnect.
+    static void __fastcall
+    _h_game_disconnect(bool cleanup)
+    {
+        l::log("disconnected from match");
+
+        /// turn off all modules
+        esp::gb_t = false;
+        legit::gb_t = false;
+
+        l::log("reloaded modules");
+
+        o_game_disconnect(cleanup);
+    };
 
 
     ///--------------- @section: Minhook -----------------///
@@ -178,6 +256,9 @@ namespace sdk
 
         l::log("initialized modules");
 
+        /// Initializing the configuration.
+        config::init();
+
         ///----------------- Initializing Globals --------------------///
 
         g::p_local = *reinterpret_cast<sdk::player_t**>((std::uint64_t)gp_base + 0x2A2560);
@@ -200,22 +281,56 @@ namespace sdk
         /// Initializing Minhook
         hk::initialize();
 
+
+
+
         /// Hooking the exported function.
         if (!hk::hook(mem::get_exp_address<engine::wgl_swapbuffers_t>("wglSwapBuffers", gp_opengl),
             hk::_h_swapbuffers, (void**)&hk::o_swapbuffers))
-            l::log("unable to hook wglSwapBuffers");
+            l::log("unable to hook wgdi.h -> wglSwapBuffers");
         else
-            l::log("hooked wglSwapBuffers");
+            l::log("hooked wgdi.h -> wglSwapBuffers");
 
         /// Hooking the exported keypress function
         ///
-        /// @ref engine/console.cpp:550 ->     void processkey(std::int32_t, bool, std::int32_t)
+        /// @ref engine/console.cpp:550 ->     void __fastcall processkey(std::int32_t, bool, std::int32_t)
         ///
-        if (!hk::hook((engine::process_key_t)((std::uint64_t)gp_base + (std::uint64_t)0x1A0260),
+        if (!hk::hook((engine::process_key_t)((std::uint64_t)gp_base + (std::uint64_t)0x1a0260),
             hk::_h_process_key, (void**)&hk::o_process_key))
-            l::log("unable to hook processkey()");
+            l::log("unable to hook engine/console.cpp:550 -> processkey");
         else
-            l::log("hooked processkey()");
+            l::log("hooked engine/console.cpp:550 -> processkey");
+
+        /// Hooking the exported intersect function
+        ///
+        /// @ref fpsgame/weapon.cpp:714 ->    sdk::dynamic_entity_t* __fastcall intersectclosest(const vector_t&, const vector_t&, sdk::player_t*, float&)
+        ///
+        if (!hk::hook((engine::intersect_t)((std::uint64_t)gp_base + (std::uint64_t)0x1db2a0),
+            hk::_h_intersect, (void**)&hk::o_intersect))
+            l::log("unable to hook fpsgame/weapon.cpp:714 -> intersectclosest");
+        else
+            l::log("hooked fpsgame/weapon.cpp:714 -> intersectclosest");
+
+        /// Hooking the exported game:gameconnect function
+        ///
+        /// @ref shared/igame.h:33 ->    void __fastcall game::gameconnect(bool _remote);
+        if (!hk::hook((engine::connect_t)((std::uint64_t)gp_base + (std::uint64_t)0x1e7750),
+            hk::_h_game_connect, (void**)&hk::o_game_connect))
+            l::log("unable to hook shared/igame.h:33 -> gameconnect");
+        else
+            l::log("hooked shared/igame.h:33 -> gameconnect");
+
+        /// Hooking the exported game:gamedisconnect function
+        ///
+        /// @ref shared/igame.h:29 ->    void __fastcall game::gameconnect(bool _remote);
+        if (!hk::hook((engine::connect_t)((std::uint64_t)gp_base + (std::uint64_t)0x1e75f0),
+            hk::_h_game_disconnect, (void**)&hk::o_game_disconnect))
+            l::log("unable to hook shared/igame.h:29 -> gamedisconnect");
+        else
+            l::log("hooked shared/igame.h:29 -> gamedisconnect");
+
+
+
 
         /// Enabling all of the hooks.
         hk::enable();
