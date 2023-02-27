@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/github/license/seanhobeck/sour?color=green)](https://github.com/seanhobeck/sour/blob/master/LICENSE)
 
-![til](/gifs/showcase.gif)
+![til](/gifs/showcase_high.gif)
 
 ### :world_map: commenting
 
