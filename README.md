@@ -1,2 +1,2 @@
-# sour
-A modded client for sauerbraten (cube2).
+# sour-base
+A modded base client for sauerbraten (cube2).
