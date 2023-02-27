@@ -15,3 +15,9 @@ information I post, please read & use the comments.
 4. `@return Function returns.`
 5. `@param Function parameters.`
 6. `@ref Reference to sauerbraten source.`
+
+### dependencies
+
+1. [dear imgui](https://github.com/ocornut/imgui/)
+2. [freetype font rasterizer](https://www.freetype.org/)
+3. [minhook](https://github.com/TsudaKageyu/minhook/)
