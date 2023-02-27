@@ -8,9 +8,9 @@
 When you are using this base or reading some of the sdk
 information I post, please read & use the comments.
 
-`@brief A brief description of something.`
-`@note A quick note.`
-`@TODO Things to do.`
-`@return Function returns.`
-`@param Function parameters.`
-`@ref Reference to sauerbraten source.`
+1. `@brief A brief description of something.`
+2. `@note A quick note.`
+3. `@TODO Things to do.`
+4. `@return Function returns.`
+5. `@param Function parameters.`
+6. `@ref Reference to sauerbraten source.`
