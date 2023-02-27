@@ -1,2 +1,4 @@
 # sour-base
-A modded base client for sauerbraten (cube2).
+
+[![GitHub license](https://img.shields.io/github/license/seanhobeck/sour?color=green)](https://github.com/rollraw/qo0-base/blob/master/LICENSE)
+
