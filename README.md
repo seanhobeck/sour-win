@@ -1,9 +1,10 @@
 # sour-base
 
-
 [![License](https://img.shields.io/github/license/seanhobeck/sour?color=green)](https://github.com/seanhobeck/sour/blob/master/LICENSE)
 
-### commenting
+![til](/gifs/showcase.gif)
+
+### :world_map: commenting
 
 When you are using this base or reading some of the sdk
 information I post, please read & use the comments.
