@@ -270,7 +270,7 @@ namespace sdk
         
         ///-------------- Clean Functions ----------------///
 
-        bool is_valid() { return mem::readable(this) && uintptr_t(this) && this != nullptr && this->m_ihealth > 0; }
+        bool is_valid() { return uintptr_t(this) && this != nullptr && this->m_ihealth > 0; } // mem::readable(this) && 
     };
 
     /// @brief: Class for the entity list.

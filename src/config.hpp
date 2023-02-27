@@ -26,7 +26,7 @@ namespace config
 		/// Legit FOV Radius
 		float legit_radius = 225;
 		/// Legit FOV Color
-		d::color_t legit_color = d::color_t(255, 25, 25, 255);
+		d::color_t legit_color = d::color_t(15, 255, 85, 255);
 
 		/// @note: Configuration default.
 		config_t() = default;
