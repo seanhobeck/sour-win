@@ -7,10 +7,7 @@ DWORD WINAPI Attach(LPVOID h_module)
     return 1ul;
 };
 
-BOOL APIENTRY DllMain( HMODULE h_module,
-                       DWORD  ul_reason,
-                       LPVOID lp_reserved
-                     )
+BOOL APIENTRY DllMain(HMODULE h_module, DWORD ul_reason, LPVOID lp_reserved)
 {
     if (ul_reason == DLL_PROCESS_ATTACH) 
     {

@@ -73,4 +73,27 @@ namespace mem
     {
         return (*static_cast<T**>(p_this))[_idx];
     };
+
+    /// @brief Singleton Structure.
+    /// @tparam T Singleton class.
+    template<typename T = void*> 
+    class singleton_t 
+    {
+    protected:
+        singleton_t() { }
+        ~singleton_t() { }
+
+        singleton_t(const singleton_t&) = delete;
+        singleton_t& operator=(const singleton_t&) = delete;
+
+        singleton_t(singleton_t&&) = delete;
+        singleton_t& operator=(singleton_t&&) = delete;
+
+    public:
+        static T& get()
+        {
+            static T p_instance{ };
+            return p_instance;
+        }
+    };
 };
