@@ -23,6 +23,7 @@
 #define pad(nm, bytes) std::uint8_t nm [bytes];
 /// @note: Create padding with a size.
 #define pad_sz(nm, n, type) std::uint8_t nm [n * sizeof(type)];
+/// @note: string merging
 #define str_merge_impl(a, b) a##b
 #define str_merge(a, b) str_merge_impl(a, b)
 /// @note: Create padding.
@@ -76,7 +77,7 @@ namespace mem
     /// @brief If a block of memory is readable.
     /// @param p_block The block of memory.
     /// @return If its readable.
-    static constexpr bool
+    static const bool
         readable(const void* p_block) 
     {
         MEMORY_BASIC_INFORMATION __mbi = { 0 };

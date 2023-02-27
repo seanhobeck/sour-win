@@ -270,7 +270,7 @@ namespace sdk
         
         ///-------------- Clean Functions ----------------///
 
-        bool is_valid() { return !IsBadReadPtr(this) && uintptr_t(this) && this != nullptr && this->m_ihealth > 0; }
+        bool is_valid() { return mem::readable(this) && uintptr_t(this) && this != nullptr && this->m_ihealth > 0; }
     };
 
     /// @brief: Class for the entity list.
@@ -315,19 +315,8 @@ namespace sdk
         /// Scale, offset, min, max
         float m_flscale, m_floffset, m_flmin, m_flmax;
 
-        /// Base Quaternion and Inverse Base Quaternion
+        /// Base Quaternion and Inverse Base Quaternions
         dual_t m_qbase, m_qinv_base;
-
-
-        ///------ Constructors -------///
-
-
-         /*
-        boneinfo_t() : m_sz_name(0), m_iparent(-1), m_ichild(-1), 
-            m_inext(-1), m_igroup(std::numeric_limits<std::int32_t>::max()), 
-            m_ischeduled(-1), m_interpindex(-1), m_interpparent(-1), 
-            m_iragdollindex(-1), m_index(-1), m_flscale(0), m_floffset(0), 
-            m_flmin(0), m_flmax(0) { /* Do nothing. * };*/
     };
 
 
@@ -335,9 +324,9 @@ namespace sdk
     ///--------- @section: SDK functions ----------///
 
 
-    /// @brief Get the name of a animation
-    /// @param idx 
-    /// @return 
+    /// @brief Getting the name of a Animation
+    /// @param idx Index of the animation.
+    /// @return std::optional<T> of the possible animation name.
     static std::optional<std::string>
         get_anim_name(std::int32_t eanim)
     {
