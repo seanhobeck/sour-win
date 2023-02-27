@@ -8,11 +8,9 @@
 When you are using this base or reading some of the sdk
 information I post, please read & use the comments.
 
-```cpp
-@brief A brief description of something.
-@note A quick note.
-@TODO Things to do.
-@return Function returns.
-@param Function parameters.
-@ref Reference to sauerbraten source.
-```
+`@brief A brief description of something.`
+`@note A quick note.`
+`@TODO Things to do.`
+`@return Function returns.`
+`@param Function parameters.`
+`@ref Reference to sauerbraten source.`
