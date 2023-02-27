@@ -21,3 +21,8 @@ information I post, please read & use the comments.
 1. [dear imgui](https://github.com/ocornut/imgui/)
 2. [freetype font rasterizer](https://www.freetype.org/)
 3. [minhook](https://github.com/TsudaKageyu/minhook/)
+
+### final notes
+
+This is still under a lot of work and is not fully finished, 
+so there are going to be lots of bad code, and even more errors.
