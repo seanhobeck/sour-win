@@ -7,19 +7,8 @@
 #pragma once
 
 /// @uses: h:: [namespace]
-#include "hooks.hpp"
+#include "../core/hooks.hpp"
 
-
-/// @brief sauerbraten SDK namespace.
-namespace sdk 
-{
-    /// @brief Pointer to the base executable.
-    static void* gp_base = nullptr;
-
-    /// @brief Pointer to the Opengl & SDL2 modules.
-    static void* gp_opengl = nullptr, * gp_sdl2 = nullptr,
-        * gp_sdl2_image = nullptr, * gp_sdl2_mixer = nullptr;
-};
 
 /// @brief sauerbraten SDK namespace.
 namespace sdk

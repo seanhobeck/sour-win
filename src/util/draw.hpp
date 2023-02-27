@@ -7,7 +7,7 @@
 #pragma once
 
 /// @uses: point_t, vector_t, quatern_t, etc..
-#include "geom.hpp"
+#include "../sdk/geom.hpp"
 
 /// @uses: opengl32, SDL2, tlhelp32
 #pragma comment(lib, "OpenGL32.lib")

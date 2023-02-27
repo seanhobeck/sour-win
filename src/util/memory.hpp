@@ -73,21 +73,4 @@ namespace mem
     {
         return (*static_cast<T**>(p_this))[_idx];
     };
-
-    /// @brief If a block of memory is readable.
-    /// @param p_block The block of memory.
-    /// @return If its readable.
-    static const bool
-        readable(const void* p_block) 
-    {
-        MEMORY_BASIC_INFORMATION __mbi = { 0 };
-
-        if (::VirtualQuery(p_block, &__mbi, 48ul))
-        {
-            if (__mbi.Protect & (PAGE_GUARD | PAGE_NOACCESS))
-                return true;
-
-            return !(__mbi.Protect & (PAGE_READONLY | PAGE_READWRITE | PAGE_WRITECOPY | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY));
-        }
-    };
 };

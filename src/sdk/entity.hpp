@@ -7,7 +7,7 @@
 #pragma once
 
  /// @uses: mem:: (namespace)
-#include "memory.hpp"
+#include "../util/memory.hpp"
 
 /// @uses: vec, vec2, etc..
 #include "geom.hpp"

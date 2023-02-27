@@ -7,8 +7,8 @@
 #pragma once
 
  /// @uses: player_t, dynamic_entity_t, phys_entity_t, etc..
-#include "entity.hpp"
-#include "config.hpp"
+#include "../sdk/entity.hpp"
+#include "../util/config.hpp"
 
 /// @uses: std::unordered_map<_Kty, _Ty>, std::vector<_Ty>
 #include <unordered_map>

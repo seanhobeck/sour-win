@@ -7,9 +7,9 @@
 #pragma once
 
 /// @uses: player_t, dynamic_entity_t, phys_entity_t, etc..
-#include "entity.hpp"
-#include "draw.hpp"
-#include "log.hpp"
+#include "../sdk/entity.hpp"
+#include "../util/draw.hpp"
+#include "../util/log.hpp"
 
 
 /// @brief Namespace for the Extra-Sensory Perception.

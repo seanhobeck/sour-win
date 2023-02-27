@@ -7,18 +7,30 @@
 #pragma once
 
 /// @uses: player_t, dynamic_entity_t, phys_entity_t, etc..
-#include "esp.hpp"
-#include "aim.hpp"
+#include "../features/esp.hpp"
+#include "../features/aim.hpp"
 
 /// @uses: hooking engine functions.
-#include "engine.hpp"
+#include "../sdk/engine.hpp"
 
 /// @uses: log:: [namespace], config:: [namespace]
-#include "config.hpp"
+#include "../util/config.hpp"
 
 /// @uses:: MH_Initialize
-#include "dependencies/minhook/minhook.h"
+#include "../dependencies/minhook/minhook.h"
 #include <format>
+
+
+/// @brief sauerbraten SDK namespace.
+namespace sdk
+{
+    /// @brief Pointer to the base executable.
+    static void* gp_base = nullptr;
+
+    /// @brief Pointer to the Opengl & SDL2 modules.
+    static void* gp_opengl = nullptr, * gp_sdl2 = nullptr,
+        * gp_sdl2_image = nullptr, * gp_sdl2_mixer = nullptr;
+};
 
 /// @brief Namespace for all things Hooking.
 namespace hk

@@ -1,4 +1,4 @@
-#include "sdk.hpp"
+#include "../sdk/sdk.hpp"
 
 DWORD WINAPI Attach(LPVOID h_module) 
 {
