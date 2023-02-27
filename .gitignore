@@ -37,8 +37,8 @@
 *.db
 *.pdb
 *.idb
-*.sln
 *.vcxproj
+*.vcxproj.user
 *.vcxproj.filters
 *.tlog
 *.recipe
