@@ -1,6 +1,6 @@
 # sour-base
 
-[![License](MIT)](https://github.com/seanhobeck/sour/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/seanhobeck/sour?color=green)](https://github.com/seanhobeck/sour/blob/master/LICENSE)
 
 ![til](/gifs/showcase_high.gif)
 
