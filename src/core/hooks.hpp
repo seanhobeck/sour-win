@@ -124,7 +124,7 @@ namespace hk
             else if (_key == SDL_KeyCode::SDLK_F6)
                 legit::toggle();
             else if (_key == SDL_KeyCode::SDLK_F7)
-                esp::toggle_thirdperson();
+                esp::toggle_tp();
         }
 
         o_process_key(_key, _down, _modstate);

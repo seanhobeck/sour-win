@@ -19,7 +19,7 @@ namespace esp
 	static bool thirdperson = false;
 
 	/// @note: Toggling thirdperson.
-	static void toggle_thirdperson() 
+	static void toggle_tp()
 	{
 		thirdperson = !thirdperson;
 
