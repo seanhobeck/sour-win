@@ -18,6 +18,10 @@ namespace esp
 	/// @note: if we are in thirdperson.
 	static bool thirdperson = false;
 
+	/// @note: if this module is toggled.
+	static bool enabled = false;
+
+
 	/// @note: Toggling thirdperson.
 	static void toggle_tp()
 	{
@@ -29,64 +33,65 @@ namespace esp
 			l::log("thirdperson un-toggled");
 	};
 
-
-
-	/// @note: if this module is toggled.
-	static bool gb_t = false;
-
 	/// @brief Toggling the module.
 	static void toggle() 
 	{ 
-		gb_t = !gb_t;
+		enabled = !enabled;
 
-		if (gb_t)
+		if (enabled)
 			l::log("esp toggled");
 		else
 			l::log("esp un-toggled");
 	};
 
+	/// @brief Drawing a player
+	static void draw_player(const sdk::player_t* p_player) 
+	{
+		/// Getting the height, width, head, and feet position of our indexed player
+		vector_t h = p_player->m_new, n = p_player->m_new;
+		n.z -= 12.5f;
+
+		/// World-to-screen positions
+		point_t _n, _h;
+
+		/// If we can see this player.
+		if (d::wts(n, _n) && d::wts(h, _h)) {
+			const float sz = (_h.y - _n.y);
+			d::rect(_n, sz / 5.f, sz, d::color_t(0, 0, 0, 255), 3.f);
+			if (!strstr(p_player->m_sz_team, g::p_local->m_sz_team))
+				d::rect(_n, sz / 5.f, sz, d::color_t(255, 105, 25, 255));
+			else
+				d::rect(_n, sz / 5.f, sz, d::color_t(25, 155, 255, 255));
+
+			/// Creating a healthbar on the side.
+			point_t g = _n;
+			g.x -= sz / 3.5f;
+			float t = g.y + sz * 1.25f;
+			float hp = sz * ((float)p_player->m_ihealth / (float)p_player->m_imaxhealth);
+			d::line(g, point_t(g.x, g.y + sz), d::color_t(0, 0, 0, 255), 3.f);
+			d::line(g, point_t(g.x, g.y + sz), d::color_t(255, 15, 25, 255));
+			d::line(g, point_t(g.x, g.y + hp), d::color_t(15, 255, 25, 255));
+		};
+	};
 
 	/// @brief Rendering to the screen all of the players except for us.
-	static void render() 
+	static void loop() 
 	{
 		/// Toggle checking
-		if (!gb_t)
+		if (!enabled)
 			return;
 
 		/// Looping through the entitylist.
 		for (std::size_t i = 0; i < *g::p_playercount; i++)
 		{
-			auto p_plr = g::p_list->get_entity(i);
+			auto p_player = g::p_list->get_entity(i);
 
-			/// Sanity checking
-			if (!p_plr->is_valid() || p_plr == g::p_local)
+			/// Sanity checking.
+			if (!p_player->is_valid() || p_player == g::p_local)
 				continue;
 
-			/// Getting the height, width, head, and feet position of our indexed player
-			vector_t h = p_plr->m_new, n = p_plr->m_new;
-			n.z -= 12.5f;
-
-			/// World-to-screen positions
-			point_t _n, _h;
-
-			/// If we can see this player.
-			if (d::wts(n, _n) && d::wts(h, _h)) {
-				const float sz = (_h.y - _n.y);
-				d::rect(_n, sz / 5.f, sz, d::color_t(0, 0, 0, 255), 3.f);
-				if (!strstr(p_plr->m_sz_team, g::p_local->m_sz_team))
-					d::rect(_n, sz / 5.f, sz, d::color_t(255, 105, 25, 255));
-				else
-					d::rect(_n, sz / 5.f, sz, d::color_t(25, 155, 255, 255));
-
-				/// Creating a healthbar on the side.
-				point_t g = _n;
-				g.x -= sz / 3.5f;
-				float t = g.y + sz * 1.25f;
-				float hp = sz * ((float)p_plr->m_ihealth / (float)p_plr->m_imaxhealth);
-				d::line(g, point_t(g.x, g.y + sz), d::color_t(0, 0, 0, 255), 3.f);
-				d::line(g, point_t(g.x, g.y + sz), d::color_t(255, 15, 25, 255));
-				d::line(g, point_t(g.x, g.y + hp), d::color_t(15, 255, 25, 255));
-			};
+			/// Drawing the player.
+			draw_player(p_player);
 		};
 	};
 };

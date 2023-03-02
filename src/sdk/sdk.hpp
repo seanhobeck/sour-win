@@ -19,6 +19,7 @@ namespace sdk
         /// Creating the log console.
         l::create("sour-client");
 
+
         ///----------- @ref: ldd bin_unix/linux_64_client -----------///
         /**
          *
@@ -38,7 +39,9 @@ namespace sdk
         /// Initializing the configuration.
         config::init();
 
+
         ///----------------- Initializing Globals --------------------///
+
 
         g::p_local = *reinterpret_cast<sdk::player_t**>((std::uint64_t)gp_base + 0x2A2560);
         g::p_list = *reinterpret_cast<sdk::entity_list**>((std::uint64_t)gp_base + 0x346C90);
@@ -54,14 +57,12 @@ namespace sdk
         else
             l::log("improper offsets");
 
+
         ///-------------- Initializing all of the Hooks -------------////
 
 
         /// Initializing Minhook
-        hk::initialize();
-
-
-
+        MH_Initialize();
 
         /// Hooking the exported function.
         if (!hk::hook(mem::get_exp_address<engine::wgl_swapbuffers_t>("wglSwapBuffers", gp_opengl),
@@ -144,9 +145,7 @@ namespace sdk
             l::log("hooked ? -> offsetray");
 
 
-
-
         /// Enabling all of the hooks.
-        hk::enable();
+        MH_EnableHook(MH_ALL_HOOKS);
     };
 };

@@ -21,36 +21,64 @@
 #include <format>
 
 
+/// @note: For clarity
+
+#define BASE_PTR void*
+#define STDCALL __stdcall
+#define FASTCALL __fastcall
+
+
 /// @brief sauerbraten SDK namespace.
 namespace sdk
 {
     /// @brief Pointer to the base executable.
-    static void* gp_base = nullptr;
+    static BASE_PTR gp_base = nullptr;
 
     /// @brief Pointer to the Opengl & SDL2 modules.
-    static void* gp_opengl = nullptr, * gp_sdl2 = nullptr,
-        * gp_sdl2_image = nullptr, * gp_sdl2_mixer = nullptr;
+    static BASE_PTR gp_opengl = nullptr; 
+    static BASE_PTR gp_sdl2 = nullptr;
+    static BASE_PTR gp_sdl2_image = nullptr; 
+    static BASE_PTR gp_sdl2_mixer = nullptr;
 };
 
 /// @brief Namespace for all things Hooking.
 namespace hk
 {
+    ///--------------- @section: Original Functions --------------///
+
+
+    /// Original function for  offsetray.
+    static engine::offset_ray_t o_offset_ray;
+    /// Original function for  allowthirdperson.
+    static engine::allow_thirdperson_t o_allow;
+    /// Original function for  is_thirdperson
+    static engine::is_thirdperson_t o_is_thirdperson;
+    /// Original Model Rendering.
+    static engine::gle_mdl_t o_mdl_rend;
+    /// Original Disconnect function.
+    static engine::connect_t o_game_disconnect;
+    /// Original Connect function.
+    static engine::connect_t o_game_connect;
+    /// Original Processkey function.
+    static engine::process_key_t o_process_key;
+    /// Original Swapbuffers function.
+    static engine::wgl_swapbuffers_t o_swapbuffers;
+    /// Original Intersect function.
+    static engine::intersect_t o_intersect;
+
+
     ///----------------- @section Hooks -------------------///
 
 
     /// Game & Client contexts.
     static engine::hctx_t g_cli;
-    /// Original Swapbuffers function.
-    static engine::wgl_swapbuffers_t o_swapbuffers;
-    /// @brief Hook for wglSwapBuffers.
-    /// @param p_hdc HDC pointer.
-    /// @param q_unk Unknown.
-    static std::int32_t __stdcall
-    _h_swapbuffers(engine::hdc_t p_hdc, std::uint32_t d_unk)
-    {
-        static bool b_initialized = true;
 
-        /// Context & Hdc
+
+    /// @brief Hook for wglSwapBuffers.
+    static std::int32_t STDCALL _h_swapbuffers(engine::hdc_t p_hdc, std::uint32_t d_unk)
+    {
+        /// Context & Hdc and Initialized instance.
+        static bool b_initialized = true;
         const auto ctx = wglGetCurrentContext();
         const auto hdc = wglGetCurrentDC();
 
@@ -93,74 +121,46 @@ namespace hk
         setup();
         g::p_matrix = reinterpret_cast<float*>((std::uint64_t)sdk::gp_base + 0x32D040);
 
-        /// Updating
-        if (legit::gb_t)
-            legit::find();
 
-        /// Render whatever...
-        esp::render();
-        legit::fov();
+        /// Updating & Rendering.
+        aim::find();
+        esp::loop();
+        aim::draw_fov();
+
 
         /// End frame.
         wglMakeCurrent(hdc, ctx);
 
         return o_swapbuffers(p_hdc, d_unk);
     };
-
-
-
-    /// Original Processkey function.
-    static engine::process_key_t o_process_key;
     /// @brief Hook for Processkey.
-    /// @param _key Keysym pressed.
-    /// @param _down If the key was pressed down.
-    /// @param _modstate ?
-    static void __fastcall
-    _h_process_key(std::int32_t _key, bool _down, std::int32_t _modstate)
+    static void FASTCALL _h_process_key(std::int32_t _key, bool _down, std::int32_t _modstate)
     {
         if (_down && _key > 0) {
             if (_key == SDL_KeyCode::SDLK_F5)
                 esp::toggle();
             else if (_key == SDL_KeyCode::SDLK_F6)
-                legit::toggle();
+                aim::toggle();
             else if (_key == SDL_KeyCode::SDLK_F7)
                 esp::toggle_tp();
         }
 
         o_process_key(_key, _down, _modstate);
     };
-
-
-
-    /// Original Intersect function.
-    static engine::intersect_t o_intersect;
     /// @brief Hook for Intersect.
-    /// @param p_from From vector.
-    /// @param p_to To vector.
-    /// @param p_player Player to hit.
-    /// @param p_dist Best distance.
-    static sdk::dynamic_entity_t* __fastcall
-    _h_intersect(const vector_t* p_from, const vector_t* p_to, sdk::player_t* p_player, float* p_dist)
+    static sdk::dynamic_entity_t* FASTCALL _h_intersect(const vector_t* p_from, const vector_t* p_to, sdk::player_t* p_player, float* p_dist)
     {
-        if (legit::gb_t && p_player == g::p_local)
+        if (aim::enabled && p_player == g::p_local)
         {
-            auto trgt = legit::nearest;
-
-            if (trgt != nullptr)
-                if (!strstr(trgt->m_sz_team, p_player->m_sz_team))
-                    return o_intersect(&p_player->m_new, &trgt->m_new, p_player, p_dist);
+            if (aim::target != nullptr)
+                if (!strstr(aim::target->m_sz_team, p_player->m_sz_team))
+                    return o_intersect(&p_player->m_new, &aim::target->m_new, p_player, p_dist);
         }
 
         return o_intersect(p_from, p_to, p_player, p_dist);
     };
-
-
-
-    /// Original Connect function.
-    static engine::connect_t o_game_connect;
     /// @brief Hook for gameconnect.
-    static void __fastcall
-    _h_game_connect(bool _remote)
+    static void FASTCALL _h_game_connect(bool _remote)
     {
         if (_remote)
             l::log("connecting to local match");
@@ -183,33 +183,23 @@ namespace hk
 
         o_game_connect(_remote);
     };
-
-    /// Original Disconnect function.
-    static engine::connect_t o_game_disconnect;
     /// @brief Hook for gamedisconnect.
-    static void __fastcall
-    _h_game_disconnect(bool cleanup)
+    static void FASTCALL _h_game_disconnect(bool cleanup)
     {
         l::log("disconnected from match");
 
-        /// turn off all modules
-        esp::gb_t = false;
-        legit::gb_t = false;
+        /// Turning off modules.
+        esp::enabled = false;
+        aim::enabled = false;
 
         l::log("reloaded modules");
 
         o_game_disconnect(cleanup);
     };
-
-
-
-    /// Original Model Rendering.
-    static engine::gle_mdl_t o_mdl_rend;
     /// @brief Hook for Model Rendering.
-    static void __fastcall
-    _h_mdl_render(sdk::ent_light_t* p_light, const char* sz_mdl, std::int32_t anim,
-        const vector_t* p_origin, float fl_yaw, float fl_pitch, std::int32_t cull,
-        sdk::dynamic_entity_t* p_entity, engine::model_attach_t* p_attach, std::int32_t base1, std::int32_t base2, float trans)
+    static void FASTCALL _h_mdl_render(sdk::ent_light_t* p_light, const char* sz_mdl, std::int32_t anim,
+        const vector_t* p_origin, float fl_yaw, float fl_pitch, std::int32_t cull, sdk::dynamic_entity_t* p_entity,
+        engine::model_attach_t* p_attach, std::int32_t base1, std::int32_t base2, float trans)
     {
         if (p_entity != nullptr)
         {
@@ -223,16 +213,8 @@ namespace hk
         /// Calling the original function.
         o_mdl_rend(p_light, sz_mdl, anim, p_origin, fl_yaw, fl_pitch, cull, p_entity, p_attach, base1, base2, trans);
     };
-
-
-    
-    /// Original function for  allowthirdperson.
-    static engine::allow_thirdperson_t o_allow;
-    /// Original function for  is_thirdperson.
-    static engine::is_thirdperson_t o_is_thirdperson;
     /// @brief Hook for Allowthirdperson.
-    static bool __fastcall
-    _h_allow_thirdperson(bool _msg)
+    static bool FASTCALL _h_allow_thirdperson(bool _msg)
     {
         if (esp::thirdperson)
             return true;
@@ -240,22 +222,15 @@ namespace hk
         return o_allow(_msg);
     };
     /// @brief Hook for Isthirdperson.
-    static bool __fastcall
-    _h_is_thirdperson()
+    static bool FASTCALL _h_is_thirdperson()
     {
         if (esp::thirdperson)
             return true;
 
         return o_is_thirdperson();
     };
-
-
-
-    /// Original function for  offsetray.
-    static engine::offset_ray_t o_offset_ray;
     /// @brief Hook for Offsetray.
-    static void __fastcall
-    _h_offset_ray(const vector_t* p_from, const vector_t* p_to, std::int32_t spread, float fl_unk, vector_t* p_unk)
+    static void FASTCALL _h_offset_ray(const vector_t* p_from, const vector_t* p_to, std::int32_t spread, float fl_unk, vector_t* p_unk)
     {
         return o_offset_ray(p_from, p_to, 0, fl_unk, p_unk);
     };
@@ -274,17 +249,5 @@ namespace hk
     static bool hook(void* _src, void* _dst, void** _orig)
     {
         return MH_CreateHook(_src, _dst, _orig) == MH_OK;
-    };
-
-    /// @brief Initializing Minhook.
-    static void initialize()
-    {
-        MH_Initialize();
-    };
-
-    /// @brief Enabling all of the hooks.
-    static void enable() 
-    {
-        MH_EnableHook(MH_ALL_HOOKS);
     };
 };

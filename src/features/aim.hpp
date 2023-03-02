@@ -17,18 +17,22 @@
 
 
 /// @brief Namespace for Legit Aimbot.
-namespace legit 
+namespace aim
 {
 	/// @note: if this module is toggled.
-	static bool gb_t = false;
+	static bool enabled = false;
+
+	/// @brief Nearest player to our FOV.
+	static sdk::player_t* target = nullptr;
+
 
 	/// @brief Toggling the module.
 	static void 
 	toggle()
 	{
-		gb_t = !gb_t;
+		enabled = !enabled;
 
-		if (gb_t)
+		if (enabled)
 			l::log("legit toggled");
 		else
 			l::log("legit un-toggled");
@@ -36,10 +40,10 @@ namespace legit
 
 	/// @brief Drawing FOV.
 	static void
-	fov() 
+	draw_fov() 
 	{
 		/// Toggle checking
-		if (!gb_t)
+		if (!enabled)
 			return;
 
 		auto rad = config::config.legit_radius;
@@ -47,18 +51,12 @@ namespace legit
 		d::circle(point_t(g::p_width / 2, g::p_height / 2), rad, 0.75f, col);
 	};
 
-	/// @brief Nearest player to our FOV.
-	static sdk::player_t* nearest = nullptr;
-
-	/// @brief Finding the nearest player to our FOV circle.
+	/// @brief Distance Finding
 	static void
-	find() 
+	distance_cycle()
 	{
-		/// Nearest is always nullptr.
-		nearest = nullptr;
-
 		/// All Possible Points.
-		std::unordered_map<sdk::player_t*, point_t> map {};
+		std::unordered_map<sdk::player_t*, point_t> map{};
 
 		for (std::size_t i = 0; i < *g::p_playercount; i++)
 		{
@@ -73,7 +71,7 @@ namespace legit
 			point_t v;
 
 			/// If it is visible on screen then add it to the map.
-			if (d::wts(p, v)) 
+			if (d::wts(p, v))
 				map.try_emplace(p_plr, v);
 		}
 
@@ -82,7 +80,7 @@ namespace legit
 		float best = 1000.f;
 
 		/// Looping through our possible vector
-		for (auto [player, point] : map) 
+		for (auto [player, point] : map)
 		{
 			/// Delta point & distance.
 			point_t delta = point_t(center.x - point.x, center.y - point.y);
@@ -96,8 +94,18 @@ namespace legit
 			if (dist < best)
 			{
 				best = dist;
-				nearest = player;
+				target = player;
 			};
 		};
+	};
+
+	/// @brief Finding the nearest player to our FOV circle.
+	static void
+	find()
+	{
+		/// Nearest is always nullptr.
+		target = nullptr;
+
+		distance_cycle();
 	};
 };
