@@ -10,10 +10,10 @@
 #include "../core/hooks.hpp"
 
 
-/// @brief sauerbraten SDK namespace.
+/// @brief: sauerbraten SDK namespace.
 namespace sdk
 {
-    /// @brief Getting the base modules needed for this client.
+    /// @brief: Getting the base modules needed for this client.
     static void setup() 
     {
         /// Creating the log console.
@@ -46,7 +46,7 @@ namespace sdk
         g::p_local = *reinterpret_cast<sdk::player_t**>((std::uint64_t)gp_base + 0x2A2560);
         g::p_list = *reinterpret_cast<sdk::entity_list**>((std::uint64_t)gp_base + 0x346C90);
         g::p_matrix = reinterpret_cast<float*>((std::uint64_t)gp_base + 0x32D040);
-        g::p_playercount = reinterpret_cast<std::int32_t*>((std::uint64_t)gp_base + 0x346C9C);
+        g::p_playercount = reinterpret_cast<int*>((std::uint64_t)gp_base + 0x346C9C);
 
         /// Sanity checking.
         if (g::p_local != nullptr &&
@@ -73,7 +73,7 @@ namespace sdk
 
         /// Hooking the exported keypress function
         ///
-        /// @ref engine/console.cpp:550 ->     void __fastcall processkey(std::int32_t, bool, std::int32_t)
+        /// @ref engine/console.cpp:550 ->     void __fastcall processkey(int, bool, int)
         ///
         if (!hk::hook((engine::process_key_t)((std::uint64_t)gp_base + (std::uint64_t)0x1a0260),
             hk::_h_process_key, (void**)&hk::o_process_key))

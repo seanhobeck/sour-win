@@ -33,10 +33,10 @@
 /// @note: Defining offset.
 #define def(type, name) struct { type name; }
 
-/// @brief Namespace for logging out to our seperate console.
+/// @brief: Namespace for logging out to our seperate console.
 namespace mem
 {
-    /// @brief Get module information (if it can be found).
+    /// @brief: Get module information (if it can be found).
     /// @param sz_module The name of the module you are trying to get.
     /// @return The module found, if nothing was found nullptr is returned.
     static void*
@@ -45,7 +45,7 @@ namespace mem
         return GetModuleHandleA(sz_module.data());
     };
 
-    /// @brief Get a exported functions address from a certain module.
+    /// @brief: Get a exported functions address from a certain module.
     /// @tparam T Function typed.
     /// @param sz_function Function name.
     /// @param sz_module  Module name.
@@ -64,17 +64,17 @@ namespace mem
         return (T) GetProcAddress((HMODULE) h_module, sz_function.data());
     };
 
-    /// @brief Getting a Virtual Function from a thisptr & index.
+    /// @brief: Getting a Virtual Function from a thisptr & index.
     /// @param p_this Pointer to base class.
     /// @param _idx Index of the vfunc.
     /// @return The virtual function from the vtable.
     template<typename T = void*> static constexpr T
-        get_vfunc(void* p_this, const std::size_t _idx)
+        get_vfunc(void* p_this, const size_t _idx)
     {
         return (*static_cast<T**>(p_this))[_idx];
     };
 
-    /// @brief Singleton Structure.
+    /// @brief: Singleton Structure.
     /// @tparam T Singleton class.
     template<typename T = void*> 
     class singleton_t 

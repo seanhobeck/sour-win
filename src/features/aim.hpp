@@ -16,17 +16,17 @@
 
 
 
-/// @brief Namespace for Legit Aimbot.
+/// @brief: Namespace for Legit Aimbot.
 namespace aim
 {
 	/// @note: if this module is toggled.
 	static bool enabled = false;
 
-	/// @brief Nearest player to our FOV.
+	/// @brief: Nearest player to our FOV.
 	static sdk::player_t* target = nullptr;
 
 
-	/// @brief Toggling the module.
+	/// @brief: Toggling the module.
 	static void 
 	toggle()
 	{
@@ -38,9 +38,8 @@ namespace aim
 			l::log("legit un-toggled");
 	};
 
-	/// @brief Drawing FOV.
-	static void
-	draw_fov() 
+	/// @brief: Drawing FOV.
+	static void draw_fov() 
 	{
 		/// Toggle checking
 		if (!enabled)
@@ -51,19 +50,18 @@ namespace aim
 		d::circle(point_t(g::p_width / 2, g::p_height / 2), rad, 0.75f, col);
 	};
 
-	/// @brief Distance Finding
-	static void
-	distance_cycle()
+	/// @brief: Distance Finding
+	static void distance_cycle()
 	{
 		/// All Possible Points.
 		std::unordered_map<sdk::player_t*, point_t> map{};
 
-		for (std::size_t i = 0; i < *g::p_playercount; i++)
+		for (size_t i = 0; i < *g::p_playercount; i++)
 		{
 			auto p_plr = g::p_list->get_entity(i);
 
 			/// Sanity, Valid, and Team checking.
-			if (!p_plr->is_valid() || p_plr == g::p_local || p_plr->m_sz_team == g::p_local->m_sz_team)
+			if (!p_plr->is_valid() || p_plr == g::p_local || strstr(g::p_local->m_sz_team, p_plr->m_sz_team))
 				continue;
 
 			/// New position and vector2 version.
@@ -99,7 +97,7 @@ namespace aim
 		};
 	};
 
-	/// @brief Finding the nearest player to our FOV circle.
+	/// @brief: Finding the nearest player to our FOV circle.
 	static void
 	find()
 	{

@@ -12,7 +12,7 @@
 #include "../util/log.hpp"
 
 
-/// @brief Namespace for the Extra-Sensory Perception.
+/// @brief: Namespace for the Extra-Sensory Perception.
 namespace esp 
 {
 	/// @note: if we are in thirdperson.
@@ -33,7 +33,7 @@ namespace esp
 			l::log("thirdperson un-toggled");
 	};
 
-	/// @brief Toggling the module.
+	/// @brief: Toggling the module.
 	static void toggle() 
 	{ 
 		enabled = !enabled;
@@ -44,7 +44,7 @@ namespace esp
 			l::log("esp un-toggled");
 	};
 
-	/// @brief Drawing a player
+	/// @brief: Drawing a player
 	static void draw_player(const sdk::player_t* p_player) 
 	{
 		/// Getting the height, width, head, and feet position of our indexed player
@@ -74,7 +74,7 @@ namespace esp
 		};
 	};
 
-	/// @brief Rendering to the screen all of the players except for us.
+	/// @brief: Rendering to the screen all of the players except for us.
 	static void loop() 
 	{
 		/// Toggle checking
@@ -82,7 +82,7 @@ namespace esp
 			return;
 
 		/// Looping through the entitylist.
-		for (std::size_t i = 0; i < *g::p_playercount; i++)
+		for (size_t i = 0; i < *g::p_playercount; i++)
 		{
 			auto p_player = g::p_list->get_entity(i);
 

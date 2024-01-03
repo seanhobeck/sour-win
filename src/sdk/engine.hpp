@@ -19,10 +19,10 @@ namespace engine
     typedef HGLRC hctx_t;
 
     /// Type definition for swapbuffers().
-    typedef std::int32_t(__stdcall* wgl_swapbuffers_t)(hdc_t, std::uint32_t);
+    typedef int(__stdcall* wgl_swapbuffers_t)(hdc_t, std::uint32_t);
 
     /// Type definition for process_key().
-    typedef void(__fastcall* process_key_t)(std::int32_t, bool, std::int32_t);
+    typedef void(__fastcall* process_key_t)(int, bool, int);
 
     /// Type definition for intersectclosest().
     /// 
@@ -33,12 +33,12 @@ namespace engine
     /// 
     /// @ref: fpsgame/game.h:721
     ///       fpsgame/game.h:722  
-    typedef sdk::player_t* (__fastcall* client_upd_t)(std::int32_t);
+    typedef sdk::player_t* (__fastcall* client_upd_t)(int);
 
     /// Type definition for damaged().
     /// 
     /// @ref: fpsgame/game.h:740
-    typedef void(__fastcall* on_damaged_t)(std::int32_t, sdk::player_t*, sdk::player_t*, bool);
+    typedef void(__fastcall* on_damaged_t)(int, sdk::player_t*, sdk::player_t*, bool);
 
     /// Type definition for killed().
     /// 
@@ -50,14 +50,14 @@ namespace engine
     /// @ref: shared/igame.h:29, shared/igame.h:33
     typedef void(__fastcall* connect_t)(bool);
 
-    /// @brief Structure Unknown
+    /// @brief: Structure Unknown
     struct model_t;
 
-    /// @brief Structure Unknown
+    /// @brief: Structure Unknown
     struct model_attach_t 
     {
         const char *m_sz_tag, *m_sz_name;
-        std::int32_t m_ianim, m_ibase_time;
+        int m_ianim, m_ibase_time;
         vector_t* m_p_origin;
         model_t* m_p_model;
     };
@@ -66,8 +66,8 @@ namespace engine
     /// 
     /// @ref shared/iengine.h:436
     typedef void(__fastcall* gle_mdl_t)
-        (sdk::ent_light_t*, const char*, std::int32_t, const vector_t*, float, float, std::int32_t,
-            sdk::dynamic_entity_t*, model_attach_t*, std::int32_t, std::int32_t, float);
+        (sdk::ent_light_t*, const char*, int, const vector_t*, float, float, int,
+            sdk::dynamic_entity_t*, model_attach_t*, int, int, float);
 
 
     /// Type definition for  isthirdperson()
@@ -83,12 +83,12 @@ namespace engine
     /// Type definition for  game::allowthirdperson()
     /// 
     /// @ref shared/igame.h:87
-    typedef void(__fastcall* offset_ray_t)(const vector_t*, const vector_t*, std::int32_t, float, vector_t*);
+    typedef void(__fastcall* offset_ray_t)(const vector_t*, const vector_t*, int, float, vector_t*);
 
     /// @note: Namespace for net-based engine things.
     namespace net 
     {
-        /// @brief Structure for data buffers.
+        /// @brief: Structure for data buffers.
         ///
         /// @ref: shared/tools.h:236
         template <class T>
@@ -101,7 +101,7 @@ namespace engine
             };
 
             T* buf;
-            std::int32_t len, maxlen;
+            int len, maxlen;
             std::uint8_t flags;
 
             data_buf_t() : buf(NULL), len(0), maxlen(0), flags(0) {}
@@ -129,7 +129,7 @@ namespace engine
             void* userData;
         } enet_packet_t;
 
-        /// @brief Packetbuffer structure.
+        /// @brief: Packetbuffer structure.
         ///
         /// @ref: shared/tools.h:337
         struct packet_buf_t : u8_buf_t

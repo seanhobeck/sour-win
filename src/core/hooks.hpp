@@ -28,20 +28,20 @@
 #define FASTCALL __fastcall
 
 
-/// @brief sauerbraten SDK namespace.
+/// @brief: sauerbraten SDK namespace.
 namespace sdk
 {
-    /// @brief Pointer to the base executable.
+    /// @brief: Pointer to the base executable.
     static BASE_PTR gp_base = nullptr;
 
-    /// @brief Pointer to the Opengl & SDL2 modules.
+    /// @brief: Pointer to the Opengl & SDL2 modules.
     static BASE_PTR gp_opengl = nullptr; 
     static BASE_PTR gp_sdl2 = nullptr;
     static BASE_PTR gp_sdl2_image = nullptr; 
     static BASE_PTR gp_sdl2_mixer = nullptr;
 };
 
-/// @brief Namespace for all things Hooking.
+/// @brief: Namespace for all things Hooking.
 namespace hk
 {
     ///--------------- @section: Original Functions --------------///
@@ -74,8 +74,8 @@ namespace hk
     static engine::hctx_t g_cli;
 
 
-    /// @brief Hook for wglSwapBuffers.
-    static std::int32_t STDCALL _h_swapbuffers(engine::hdc_t p_hdc, std::uint32_t d_unk)
+    /// @brief: Hook for wglSwapBuffers.
+    static int STDCALL _h_swapbuffers(engine::hdc_t p_hdc, std::uint32_t d_unk)
     {
         /// Context & Hdc and Initialized instance.
         static bool b_initialized = true;
@@ -87,7 +87,7 @@ namespace hk
         {
             glPushAttrib(GL_ALL_ATTRIB_BITS);
             glPushMatrix();
-            std::int32_t viewport[4];
+            int viewport[4];
             glGetIntegerv(GL_VIEWPORT, viewport);
             glViewport(0, 0, viewport[2], viewport[3]);
             g::p_width = viewport[2];
@@ -133,8 +133,8 @@ namespace hk
 
         return o_swapbuffers(p_hdc, d_unk);
     };
-    /// @brief Hook for Processkey.
-    static void FASTCALL _h_process_key(std::int32_t _key, bool _down, std::int32_t _modstate)
+    /// @brief: Hook for Processkey.
+    static void FASTCALL _h_process_key(int _key, bool _down, int _modstate)
     {
         if (_down && _key > 0) {
             if (_key == SDL_KeyCode::SDLK_F5)
@@ -147,7 +147,7 @@ namespace hk
 
         o_process_key(_key, _down, _modstate);
     };
-    /// @brief Hook for Intersect.
+    /// @brief: Hook for Intersect.
     static sdk::dynamic_entity_t* FASTCALL _h_intersect(const vector_t* p_from, const vector_t* p_to, sdk::player_t* p_player, float* p_dist)
     {
         if (aim::enabled && p_player == g::p_local)
@@ -159,7 +159,7 @@ namespace hk
 
         return o_intersect(p_from, p_to, p_player, p_dist);
     };
-    /// @brief Hook for gameconnect.
+    /// @brief: Hook for gameconnect.
     static void FASTCALL _h_game_connect(bool _remote)
     {
         if (_remote)
@@ -171,7 +171,7 @@ namespace hk
         g::p_local = *reinterpret_cast<sdk::player_t**>((std::uint64_t)sdk::gp_base + 0x2A2560);
         g::p_list = *reinterpret_cast<sdk::entity_list**>((std::uint64_t)sdk::gp_base + 0x346C90);
         g::p_matrix = reinterpret_cast<float*>((std::uint64_t)sdk::gp_base + 0x32D040);
-        g::p_playercount = reinterpret_cast<std::int32_t*>((std::uint64_t)sdk::gp_base + 0x346C9C);
+        g::p_playercount = reinterpret_cast<int*>((std::uint64_t)sdk::gp_base + 0x346C9C);
 
         if (g::p_local != nullptr &&
             g::p_list != nullptr &&
@@ -183,7 +183,7 @@ namespace hk
 
         o_game_connect(_remote);
     };
-    /// @brief Hook for gamedisconnect.
+    /// @brief: Hook for gamedisconnect.
     static void FASTCALL _h_game_disconnect(bool cleanup)
     {
         l::log("disconnected from match");
@@ -196,10 +196,10 @@ namespace hk
 
         o_game_disconnect(cleanup);
     };
-    /// @brief Hook for Model Rendering.
-    static void FASTCALL _h_mdl_render(sdk::ent_light_t* p_light, const char* sz_mdl, std::int32_t anim,
-        const vector_t* p_origin, float fl_yaw, float fl_pitch, std::int32_t cull, sdk::dynamic_entity_t* p_entity,
-        engine::model_attach_t* p_attach, std::int32_t base1, std::int32_t base2, float trans)
+    /// @brief: Hook for Model Rendering.
+    static void FASTCALL _h_mdl_render(sdk::ent_light_t* p_light, const char* sz_mdl, int anim,
+        const vector_t* p_origin, float fl_yaw, float fl_pitch, int cull, sdk::dynamic_entity_t* p_entity,
+        engine::model_attach_t* p_attach, int base1, int base2, float trans)
     {
         if (p_entity != nullptr)
         {
@@ -213,7 +213,7 @@ namespace hk
         /// Calling the original function.
         o_mdl_rend(p_light, sz_mdl, anim, p_origin, fl_yaw, fl_pitch, cull, p_entity, p_attach, base1, base2, trans);
     };
-    /// @brief Hook for Allowthirdperson.
+    /// @brief: Hook for Allowthirdperson.
     static bool FASTCALL _h_allow_thirdperson(bool _msg)
     {
         if (esp::thirdperson)
@@ -221,7 +221,7 @@ namespace hk
 
         return o_allow(_msg);
     };
-    /// @brief Hook for Isthirdperson.
+    /// @brief: Hook for Isthirdperson.
     static bool FASTCALL _h_is_thirdperson()
     {
         if (esp::thirdperson)
@@ -229,8 +229,8 @@ namespace hk
 
         return o_is_thirdperson();
     };
-    /// @brief Hook for Offsetray.
-    static void FASTCALL _h_offset_ray(const vector_t* p_from, const vector_t* p_to, std::int32_t spread, float fl_unk, vector_t* p_unk)
+    /// @brief: Hook for Offsetray.
+    static void FASTCALL _h_offset_ray(const vector_t* p_from, const vector_t* p_to, int spread, float fl_unk, vector_t* p_unk)
     {
         return o_offset_ray(p_from, p_to, 0, fl_unk, p_unk);
     };
@@ -241,7 +241,7 @@ namespace hk
 
 
 
-    /// @brief Hooking a 64bit function (abs jmp).
+    /// @brief: Hooking a 64bit function (abs jmp).
     /// @param _src Original func address.
     /// @param _dst Hooked func address.
     /// @param _dst Original func handler.

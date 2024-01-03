@@ -15,13 +15,13 @@
 /// Defining your sour version.
 #define SOUR_VERSION "v2.3.5"
 
-/// @brief: Namespace for all things logging.
+/// @brief:: Namespace for all things logging.
 namespace l
 {
 	/// Pointer to the file
 	static FILE* fptr;
 
-	/// @brief Creating a console.
+	/// @brief: Creating a console.
 	static void
 	create(const std::string_view sz_console_title) 
 	{
@@ -33,7 +33,7 @@ namespace l
 		freopen_s(&l::fptr, "CONOUT$", "w", stdout);
 	};
 
-	/// @brief Logging out to the console.
+	/// @brief: Logging out to the console.
 	template<typename T = const std::string>
 	static void log(T _msg) 
 	{

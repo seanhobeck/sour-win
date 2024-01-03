@@ -13,7 +13,11 @@
 #include <optional>
 
 
-/// @brief Basic structure for a vector2 / point
+/// @warning: C4244 'possible loss of data error', that we do not encounter.
+#pragma warning(push)
+#pragma warning(disable : 4244)
+ 
+ /// @brief: Basic structure for a vector2 / point
 struct point_t
 {
     /// xy, rg, etc...
@@ -30,7 +34,7 @@ struct point_t
     explicit point_t(double _x, double _y) : x(_x), y(_y) {};
 };
 
-/// @brief Basic structure for a vector3
+/// @brief: Basic structure for a vector3
 struct vector_t
 {
     /// xyz, rgb, v, etc...
@@ -101,7 +105,7 @@ struct vector_t
 /// @note: Type definition.
 typedef vector_t angle_t;
 
-/// @brief Getting the angle to the other player.
+/// @brief: Getting the angle to the other player.
 /// @returns the Angle to the entity provided.
 static angle_t
 angle_to(const vector_t& o, const vector_t& e) 
@@ -110,7 +114,7 @@ angle_to(const vector_t& o, const vector_t& e)
         std::asinf((e.z - o.z) / o.distance(e)) * (3.1415927f / 180.f), 0.f);
 };
 
-/// @brief Basic structure for a vector4 / quaternion
+/// @brief: Basic structure for a vector4 / quaternion
 struct quatern_t
 {
     /// xyzw, rgba, etc...
@@ -147,3 +151,4 @@ inline bool operator!=(const vector_t& _u, const vector_t& _v)
 {
     return _u.x != _v.x || _u.y != _v.y || _u.z != _v.z;
 };
+#pragma warning(pop)

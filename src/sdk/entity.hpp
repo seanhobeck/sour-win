@@ -16,10 +16,10 @@
 #include "enum.hpp"
 
 
-/// @brief sauerbraten SDK namespace.
+/// @brief: sauerbraten SDK namespace.
 namespace sdk
 {
-    /// @brief Class structure for a basic entity.
+    /// @brief: Class structure for a basic entity.
     class entity_t
     {
     public:
@@ -32,23 +32,23 @@ namespace sdk
         pad(res, 1);
     };
 
-    /// @brief Class structure for a light entity.
+    /// @brief: Class structure for a light entity.
     class ent_light_t
     {
     public:
 
         /// Color, Direction and Time length.
         vector_t color, dir;
-        std::int32_t millis;
+        int millis;
     };
 
-    /// @brief Class structure for a extended entity.
+    /// @brief: Class structure for a extended entity.
     class ext_entity_t : public entity_t
     {
     public:
 
         /// Flags, Light Ent, and the attached.
-        std::int32_t m_iflags;
+        int m_iflags;
         ent_light_t m_slight;
         ext_entity_t* m_pattached;
 
@@ -69,7 +69,7 @@ namespace sdk
         void clearnopickup() { m_iflags &= ~EF_NOPICKUP; }
     };
 
-    /// @brief Class structure for physics entities.
+    /// @brief: Class structure for physics entities.
     class phys_entity_t
     {
     public:
@@ -102,14 +102,14 @@ namespace sdk
         ///-------------- Struct Functions -----------------///
 
 
-        /// @brief Resetting the entire physics entity.
+        /// @brief: Resetting the entire physics entity.
         void reset()
         {
             m_new = m_origin;
             m_delta = vector_t(0.f, 0.f, 0.f);
         };
 
-        /// @brief Getting the position of the feet of the entity.
+        /// @brief: Getting the position of the feet of the entity.
         /// @param fl_offset Additional offset.
         /// @return Position of the feet of the entity.
         vector_t get_feet_origin(float fl_offset = 0.f)
@@ -117,7 +117,7 @@ namespace sdk
             return m_origin - vector_t(0.f, 0.f, m_flheight + fl_offset);
         };
 
-        /// @brief Getting the position of the head of the entity.
+        /// @brief: Getting the position of the head of the entity.
         /// @param fl_offset Additional offset.
         /// @return Position of the head of the entity.
         vector_t get_head_origin(float fl_offset = 0.f)
@@ -126,11 +126,11 @@ namespace sdk
         };
     };
 
-    /// @brief Structure for animation information.
+    /// @brief: Structure for animation information.
     struct animation_info_t
     {
         /// Animation type, frame count, range, and base time.
-        std::int32_t m_ianim, m_iframe, m_irange, m_ibasetime;
+        int m_ianim, m_iframe, m_irange, m_ibasetime;
         /// Animation speed.
         float m_flspeed;
         std::uint32_t m_iseed;
@@ -149,11 +149,11 @@ namespace sdk
         };
     };
 
-    /// @brief Structure for entity interpolation.
+    /// @brief: Structure for entity interpolation.
     struct interp_info_t
     {
         animation_info_t m_previous, m_current;
-        std::int32_t m_ilast;
+        int m_ilast;
         void* m_last;
     };
 
@@ -162,7 +162,7 @@ namespace sdk
     /// Struct declaration.
     struct ragdoll_data_t;
 
-    /// @brief Class structure for animated characters or characters that can recieve input.
+    /// @brief: Class structure for animated characters or characters that can recieve input.
     class dynamic_entity_t : public phys_entity_t
     {
     public:
@@ -176,7 +176,7 @@ namespace sdk
         ragdoll_data_t* m_pragdoll;
         occlude_query_t* m_pquery;
         /// Last time it was rendered.
-        std::int32_t m_ilastrendered;
+        int m_ilastrendered;
         std::uint8_t m_uoccluded;
 
         ///------------ Constructors & Destructors -------------///
@@ -192,14 +192,14 @@ namespace sdk
         };
     };
 
-    /// @brief Class structure for player state.
+    /// @brief: Class structure for player state.
     /// @link: src/fpsgame/game.h:367
     class player_state_t
     {
     public:
 
         /// Health, Max Health, 
-        std::int32_t m_ihealth, m_imaxhealth,
+        int m_ihealth, m_imaxhealth,
             m_iarmor, m_iarmor_type, m_iquadmillis,
             m_igunselect, m_igunwait, m_iammo[12ul],
             m_iaitype, m_iskill;
@@ -209,19 +209,19 @@ namespace sdk
         player_state_t() : m_imaxhealth(100), m_iaitype(AI_NONE), m_iskill(0) { };
     };
 
-    /// @brief Class structure for ai state.
+    /// @brief: Class structure for ai state.
     class ai_state_t
     {
         int type, millis, targtype, target, idle;
         bool override;
     };
 
-    /// @brief Class structure for ai info.
+    /// @brief: Class structure for ai info.
     class ai_info_t
     {
     public:
         std::vector<ai_state_t> state;
-        std::vector<std::int32_t> route;
+        std::vector<int> route;
         vector_t target, spot;
         int enemy, enemyseen, enemymillis, weappref, prevnodes[6], targnode, targlast, targtime, targseq,
             lastrun, lasthunt, lastaction, lastcheck, jumpseed, jumprand, blocktime, huntseq, blockseq, lastaimrnd;
@@ -237,32 +237,32 @@ namespace sdk
     /// @link: src/shared/tools.h:158-159
     typedef char string_t[260];
 
-    /// @brief Class Structure for all Player Entities.
+    /// @brief: Class Structure for all Player Entities.
     class player_t : public dynamic_entity_t, public player_state_t
     {
     public:
-        /// @brief For all of the data (to be updated.) 
+        /// @brief: For all of the data (to be updated.) 
         
         /// Weight, Client Number, Privledge level, Ping, Last Update, Action & Gun.
-        std::int32_t m_iweight, m_iclientn, m_iprivledge,
+        int m_iweight, m_iclientn, m_iprivledge,
             m_last_upd, m_plag, m_iping, m_isequence, m_irespawned,
             m_isuicide, m_last_pain, m_last_action, m_last_gun;
         bool m_battacking;
-        std::int32_t m_iattack_sound, m_iattack_chan, m_idle_sound,
+        int m_iattack_sound, m_iattack_chan, m_idle_sound,
             m_idle_chan, m_last_taunt, m_last_pickup, m_last_pickup_millis,
             m_last_base, m_last_ammo, m_flagpickup, m_itokens;
         vector_t m_vcollect;
         /// Kills, Flags, Deaths, Shots & Damage.
-        std::int32_t m_ikills, m_iflags, m_ideaths, m_totaldamage, m_totalshots;
+        int m_ikills, m_iflags, m_ideaths, m_totaldamage, m_totalshots;
         void* m_editptr;
         /// Yaw, Pitch, Roll
         float m_dyaw, m_dpitch, m_droll, m_nyaw, m_npitch, m_nroll;
-        std::int32_t m_smoothmillis;
+        int m_smoothmillis;
         /// Name, Team, Info, Player model number.
         string_t m_sz_name, m_sz_team, m_sz_info;
-        std::int32_t m_imodel;
+        int m_imodel;
         void* m_ai_ptr;
-        std::int32_t m_owner, m_lastnode;
+        int m_owner, m_lastnode;
         /// Position of the gun muzzle.
         vector_t m_vmuzzle;
         
@@ -273,7 +273,7 @@ namespace sdk
         bool is_valid() { return uintptr_t(this) && this != nullptr && this->m_ihealth > 0; } // mem::readable(this) && 
     };
 
-    /// @brief: Class for the entity list.
+    /// @brief:: Class for the entity list.
     class entity_list 
     {
     private:
@@ -286,14 +286,14 @@ namespace sdk
         entity_list() = default;
 
         /// @note: Gets a entity at the index, otherwise it throws std::out_of_range exception.
-        player_t* get_entity(const std::size_t idx) 
+        player_t* get_entity(const size_t idx) 
         {
             return entities[idx];
         };
     };
 
 
-    /// @brief Filler class (two vec4s).
+    /// @brief: Filler class (two vec4s).
     struct dual_t 
     {
         /// The two quaternions (vec4s).
@@ -302,14 +302,14 @@ namespace sdk
         dual_t() = default;
     };
 
-    /// @brief Structure for information on Bones.
+    /// @brief: Structure for information on Bones.
     class bone_info_t 
     {
     public:
         /// Name of the bone.
         string_t m_sz_name;
         /// Bone index information.
-        std::int32_t m_iparent, m_ichild, m_inext, m_igroup, 
+        int m_iparent, m_ichild, m_inext, m_igroup, 
             m_ischeduled, m_interpindex, m_interp_parent, 
             m_iragdoll_index, m_index;
         /// Scale, offset, min, max
@@ -324,11 +324,11 @@ namespace sdk
     ///--------- @section: SDK functions ----------///
 
 
-    /// @brief Getting the name of a Animation
+    /// @brief: Getting the name of a Animation
     /// @param idx Index of the animation.
     /// @return std::optional<T> of the possible animation name.
     static std::optional<std::string>
-        get_anim_name(std::int32_t eanim)
+        get_anim_name(int eanim)
     {
         static const std::vector<std::string> anims = {
             "dead", "dying", "idle",
@@ -347,7 +347,7 @@ namespace sdk
 };
 
 
-/// @brief Namespace for globals.
+/// @brief: Namespace for globals.
 namespace g
 {
     /// @note: Pointer to the local player (us).
@@ -357,5 +357,5 @@ namespace g
     static sdk::entity_list* p_list;
 
     /// @note: Pointer to the player count.
-    static std::int32_t* p_playercount;
+    static int* p_playercount;
 };

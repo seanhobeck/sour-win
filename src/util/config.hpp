@@ -17,10 +17,10 @@
 #include "log.hpp"
 #include "draw.hpp"
 
-/// @brief Namespace for all things considered configuration wise.
+/// @brief: Namespace for all things considered configuration wise.
 namespace config 
 {
-	/// @brief Structure for the configuration of sour.
+	/// @brief: Structure for the configuration of sour.
 	struct config_t 
 	{
 		/// Legit FOV Radius
@@ -32,7 +32,7 @@ namespace config
 		config_t() = default;
 	};
 
-	/// @brief Global Configuration.
+	/// @brief: Global Configuration.
 	static config_t config = config_t();
 
 
@@ -48,7 +48,7 @@ namespace config
 		return std::string(_buf);
 	};
 
-	/// @brief If a configuration already exists.
+	/// @brief: If a configuration already exists.
 	static bool
 	exists() 
 	{
@@ -64,14 +64,14 @@ namespace config
 		return false;
 	};
 
-	/// @brief Writing a configuration out to the filestream.
+	/// @brief: Writing a configuration out to the filestream.
 	static bool 
 	write(std::ofstream& out, const config_t& _conf) 
 	{
 	};
 
 
-	/// @brief Initializing our config.
+	/// @brief: Initializing our config.
 	static void
 	init()
 	{

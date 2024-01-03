@@ -19,34 +19,33 @@
 #include <intrin.h>
 
 
-/// @brief Global namespace.
+/// @brief: Global namespace.
 namespace g 
 {
 	/// @note: Pointer to the view matrix.
 	static float* p_matrix;
 
 	/// @note: Width & Height of the viewport.
-	static std::int32_t p_width, p_height;
+	static int p_width, p_height;
 };
 
-/// @brief Namespace for all things drawing.
+/// @brief: Namespace for all things drawing.
 namespace d
 {
-	/// @brief Structure for rgba color.
+	/// @brief: Structure for rgba color.
 	struct color_t 
 	{
 		/// r, g, b, a
-		std::int32_t r = 0, g = 0, b = 0, a = 0;
+		int r = 0, g = 0, b = 0, a = 0;
 
 		///-------------- Constructor ----------------///
 
-		color_t(std::int32_t _r, std::int32_t _g, std::int32_t _b, std::int32_t _a) : r(_r), g(_g), b(_b), a(_a) { };
+		color_t(int _r, int _g, int _b, int _a) : r(_r), g(_g), b(_b), a(_a) { };
 	};
 
-	/// @brief World to screen function.
+	/// @brief: World to screen function.
 	/// @returns If the world to screen was possible.
-	static bool
-	wts(vector_t o, point_t& _ref) 
+	static bool wts(vector_t o, point_t& _ref) 
 	{
 		quatern_t _mbp;
 		_mbp.x = o.x * g::p_matrix[0] + o.y * g::p_matrix[4] + o.z * g::p_matrix[8] + g::p_matrix[12];
@@ -66,9 +65,9 @@ namespace d
 		return true;
 	};
 	
-	/// @brief Drawing a rectangle.
-	static void 
-	rect(const point_t& _orig, const float w, const float h, const color_t color, const float width = 1.5f)
+	/// @brief: Drawing a rectangle.
+	static void rect(const point_t& _orig, const float w, const float h, 
+		const color_t color, const float width = 1.5f)
 	{
 		glLineWidth(width);
 		glBegin(GL_LINE_STRIP);
@@ -81,9 +80,9 @@ namespace d
 		glEnd();
 	};
 
-	/// @brief Drawing a line.
-	static void
-	line(const point_t& _to, const point_t& _from, const color_t color, const float width = 1.5f)
+	/// @brief: Drawing a line.
+	static void line(const point_t& _to, const point_t& _from, 
+		const color_t color, const float width = 1.5f)
 	{
 		glLineWidth(width);
 		glBegin(GL_LINES);
@@ -93,16 +92,16 @@ namespace d
 		glEnd();
 	};
 
-	/// @brief Drawing a circle.
-	static void
-	circle(const point_t& _pos, const float rad, const float width, const color_t color) 
+	/// @brief: Drawing a circle.
+	static void circle(const point_t& _pos, const float rad, const float width, 
+		const color_t color) 
 	{
 		glLineWidth(width);
 		glBegin(GL_LINE_STRIP);
 		glColor4ub(color.r, color.g, color.b, color.a);
 
 		float fl_theta;
-		for (std::int32_t i = 0; i < 360; ++i)
+		for (int i = 0; i < 360; ++i)
 		{
 			fl_theta = i * 3.1415926535f / 180.f;
 			glVertex2f(_pos.x + rad * std::cos(fl_theta), _pos.y + (rad * std::sin(fl_theta)));
@@ -118,7 +117,7 @@ namespace d
 	/// 
 	/// @ref shared/iengine.h:257
 	typedef void(__fastcall* render_text_t) /// left, top, rgba = 0xFFFFFFFF (white), cursor-1, maxwidth-1
-		(const char*, std::int32_t, std::int32_t, std::int32_t, std::int32_t, std::int32_t, std::int32_t, std::int32_t, std::int32_t);
+		(const char*, int, int, int, int, int, int, int, int);
 
 	/// @ref -> 0x15fb80
 	static render_text_t text = nullptr;

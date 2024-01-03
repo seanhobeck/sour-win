@@ -36,9 +36,6 @@
 *.db
 *.pdb
 *.idb
-*.vcxproj
-*.vcxproj.user
-*.vcxproj.filters
 *.tlog
 *.recipe
 *.ipdb
@@ -50,3 +47,5 @@
 *.tlog
 *.pdb
 src/x64
+*.ilk
+*.log
